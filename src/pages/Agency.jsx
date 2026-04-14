@@ -41,14 +41,17 @@ const Agency = () => {
                     className="border-t border-white/10 pt-24"
                 >
                     <h2 className="text-4xl font-bold mb-16">The Leadership</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                        {[1, 2, 3].map((_, i) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl">
+                        {[
+                            { name: 'Arun AG', role: 'Founder' },
+                            { name: 'Anila G Nair', role: 'Co-founder' }
+                        ].map((person, i) => (
                             <div key={i} className="group">
                                 <div className="aspect-[3/4] bg-[#1a1a1a] rounded-xl mb-6 overflow-hidden relative">
                                     <div className="absolute inset-0 bg-gray-800 group-hover:scale-105 transition-transform duration-500" />
                                 </div>
-                                <h3 className="text-xl font-bold">Alex {['Chen', 'Rivera', 'Kovacs'][i]}</h3>
-                                <div className="text-brand-red font-mono text-xs uppercase mt-1">{['Founder & CEO', 'Creative Director', 'CTO'][i]}</div>
+                                <h3 className="text-xl font-bold">{person.name}</h3>
+                                <div className="text-brand-red font-mono text-xs uppercase mt-1">{person.role}</div>
                             </div>
                         ))}
                     </div>
