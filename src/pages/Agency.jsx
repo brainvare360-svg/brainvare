@@ -43,8 +43,8 @@ const Agency = () => {
                     <h2 className="text-4xl font-bold mb-16">The Leadership</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl">
                         {[
-                            { name: 'Arun AG', role: 'Founder', image: '/arun.jpg' },
-                            { name: 'Anila G Nair', role: 'Co-founder', image: '/anila.jpg' }
+                            { name: 'Arun AG', role: 'Founder', image: '/Arun AG.png' },
+                            { name: 'Anila G Nair', role: 'Co-founder', image: '/Anila G Nair.png' }
                         ].map((person, i) => (
                             <div key={i} className="group">
                                 <div className="aspect-[3/4] bg-[#1a1a1a] rounded-xl mb-6 overflow-hidden relative">
