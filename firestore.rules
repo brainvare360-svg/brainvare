@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Open access since there is no authentication setup yet
+    // WARNING: This allows anyone to read/write. Best to add auth later.
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
