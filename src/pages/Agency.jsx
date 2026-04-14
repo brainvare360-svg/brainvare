@@ -43,12 +43,13 @@ const Agency = () => {
                     <h2 className="text-4xl font-bold mb-16">The Leadership</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl">
                         {[
-                            { name: 'Arun AG', role: 'Founder' },
-                            { name: 'Anila G Nair', role: 'Co-founder' }
+                            { name: 'Arun AG', role: 'Founder', image: '/arun.jpg' },
+                            { name: 'Anila G Nair', role: 'Co-founder', image: '/anila.jpg' }
                         ].map((person, i) => (
                             <div key={i} className="group">
                                 <div className="aspect-[3/4] bg-[#1a1a1a] rounded-xl mb-6 overflow-hidden relative">
-                                    <div className="absolute inset-0 bg-gray-800 group-hover:scale-105 transition-transform duration-500" />
+                                    <img src={person.image} alt={person.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
                                 </div>
                                 <h3 className="text-xl font-bold">{person.name}</h3>
                                 <div className="text-brand-red font-mono text-xs uppercase mt-1">{person.role}</div>
