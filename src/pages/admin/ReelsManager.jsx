@@ -161,7 +161,7 @@ const ReelRow = ({ reel, index, onSave }) => {
                 {!isEditing && (
                     <button
                         onClick={() => setIsEditing(true)}
-                        className="flex-shrink-0 p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white opacity-0 group-hover:opacity-100"
+                        className="flex-shrink-0 p-2 bg-white/5 hover:bg-brand-red/20 border border-white/10 hover:border-brand-red/30 rounded-lg transition-colors text-gray-400 hover:text-white mr-6"
                         title="Edit Link"
                     >
                         <Edit3 size={16} />
@@ -175,18 +175,33 @@ const ReelRow = ({ reel, index, onSave }) => {
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 
+const WORKER_URL = 'https://brainvare-r2-uploader.brainvare.workers.dev';
+
 const ReelsManager = () => {
-    const { reelsData, updateReelLink, resetReels } = useReels();
+    const { reelsData, updateReelLink, addReel, removeReel, resetReels } = useReels();
     const [searchTerm, setSearchTerm] = useState('');
     const [showAll, setShowAll] = useState(false);
     const [syncing, setSyncing] = useState(false);
     const [syncSuccess, setSyncSuccess] = useState(false);
 
+    // Upload state
+    const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [uploadError, setUploadError] = useState('');
+    const [newInstagramLink, setNewInstagramLink] = useState('');
+    const [isDragging, setIsDragging] = useState(false);
+    const fileInputRef = useRef(null);
+
     const forceSyncToCloud = async () => {
         setSyncing(true);
         setSyncSuccess(false);
         try {
-            await setDoc(doc(db, 'siteData', 'reels'), { items: reelsData });
+            const res = await fetch(`${WORKER_URL}/reels`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: reelsData }),
+            });
+            if (!res.ok) throw new Error(await res.text());
             setSyncSuccess(true);
             setTimeout(() => setSyncSuccess(false), 3000);
         } catch (error) {
@@ -195,6 +210,86 @@ const ReelsManager = () => {
         } finally {
             setSyncing(false);
         }
+    };
+
+    const handleUpload = async (file) => {
+        if (!file || !file.type.startsWith('video/')) {
+            setUploadError('Please select a valid video file (.mp4)');
+            return;
+        }
+        if (file.size > 100 * 1024 * 1024) {
+            setUploadError('File must be under 100 MB');
+            return;
+        }
+
+        setUploading(true);
+        setUploadError('');
+        setUploadProgress(0);
+
+        try {
+            const formData = new FormData();
+            formData.append('video', file);
+
+            const result = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        setUploadProgress(Math.round((e.loaded / e.total) * 100));
+                    }
+                });
+                xhr.addEventListener('load', () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        resolve(JSON.parse(xhr.responseText));
+                    } else {
+                        reject(new Error(JSON.parse(xhr.responseText)?.error || 'Upload failed'));
+                    }
+                });
+                xhr.addEventListener('error', () => reject(new Error('Network error')));
+                xhr.open('POST', `${WORKER_URL}/upload`);
+                xhr.send(formData);
+            });
+
+            if (result.success && result.url) {
+                addReel(result.url, newInstagramLink);
+                setNewInstagramLink('');
+                setUploadProgress(100);
+                setTimeout(() => setUploadProgress(0), 2000);
+            } else {
+                setUploadError(result.error || 'Upload failed');
+            }
+        } catch (err) {
+            setUploadError(err.message || 'Upload failed');
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const handleDeleteReel = async (index) => {
+        const reel = reelsData[index];
+        if (!window.confirm(`Delete reel #${index + 1}? This cannot be undone.`)) return;
+
+        if (reel.video.includes('r2.dev/reels/')) {
+            try {
+                const key = 'reels/' + reel.video.split('/reels/').pop();
+                await fetch(`${WORKER_URL}/delete?key=${encodeURIComponent(key)}`, { method: 'DELETE' });
+            } catch (e) {
+                console.warn('Could not delete from R2:', e);
+            }
+        }
+        removeReel(index);
+    };
+
+    const handleDragOver = (e) => { e.preventDefault(); setIsDragging(true); };
+    const handleDragLeave = () => setIsDragging(false);
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const file = e.dataTransfer.files[0];
+        if (file) handleUpload(file);
+    };
+    const handleFileSelect = (e) => {
+        const file = e.target.files[0];
+        if (file) handleUpload(file);
     };
 
     const filteredReels = reelsData.filter((reel, index) => {
@@ -207,10 +302,8 @@ const ReelsManager = () => {
         );
     });
 
-    // Show first 10 by default, all when expanded or searching
     const displayedReels = (showAll || searchTerm) ? filteredReels : filteredReels.slice(0, 10);
     const hasMore = !showAll && !searchTerm && filteredReels.length > 10;
-
     const totalReels = reelsData.length;
     const linkedReels = reelsData.filter(r => r.instagram && r.instagram.trim() !== '').length;
 
@@ -220,7 +313,7 @@ const ReelsManager = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-white mb-2">Reels Manager</h1>
-                    <p className="text-gray-400">Manage Instagram links for your ReelsWall videos</p>
+                    <p className="text-gray-400">Upload videos and manage Instagram links for your ReelsWall</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <button
@@ -245,18 +338,84 @@ const ReelsManager = () => {
                         className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition-colors"
                     >
                         <RefreshCw size={16} />
-                        Reset to Defaults
+                        Reset
                     </button>
                 </div>
+            </div>
+
+            {/* Upload Section */}
+            <div className="bg-[#111] border border-white/10 rounded-2xl p-6 space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                    <Film size={20} className="text-brand-red" />
+                    <h2 className="text-lg font-semibold text-white">Upload New Reel</h2>
+                </div>
+
+                <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={() => !uploading && fileInputRef.current?.click()}
+                    className={`relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${
+                        isDragging ? 'border-brand-red bg-brand-red/5'
+                            : uploading ? 'border-white/10 bg-white/5 cursor-wait'
+                            : 'border-white/10 hover:border-white/20 hover:bg-white/5'
+                    }`}
+                >
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="video/mp4,video/quicktime,video/webm"
+                        onChange={handleFileSelect}
+                        className="hidden"
+                        disabled={uploading}
+                    />
+                    {uploading ? (
+                        <div className="space-y-3">
+                            <div className="w-12 h-12 mx-auto bg-brand-red/10 rounded-full flex items-center justify-center">
+                                <RefreshCw size={24} className="text-brand-red animate-spin" />
+                            </div>
+                            <p className="text-white font-medium">Uploading... {uploadProgress}%</p>
+                            <div className="w-full max-w-xs mx-auto bg-white/10 rounded-full h-2">
+                                <div className="bg-brand-red h-2 rounded-full transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="space-y-2">
+                            <div className="w-12 h-12 mx-auto bg-white/5 rounded-full flex items-center justify-center">
+                                <Film size={24} className="text-gray-400" />
+                            </div>
+                            <p className="text-white font-medium">Drop a video here or click to browse</p>
+                            <p className="text-xs text-gray-500">MP4, WebM, MOV • Max 100 MB</p>
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex gap-3">
+                    <div className="flex-1 relative">
+                        <Instagram size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-pink-500/60" />
+                        <input
+                            type="text"
+                            placeholder="Instagram link (optional — can add later)"
+                            value={newInstagramLink}
+                            onChange={(e) => setNewInstagramLink(e.target.value)}
+                            className="w-full bg-black/50 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20"
+                        />
+                    </div>
+                </div>
+
+                {uploadError && (
+                    <div className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-2">
+                        <AlertCircle size={16} />
+                        {uploadError}
+                    </div>
+                )}
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="bg-[#111] border border-white/5 rounded-xl p-4">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-white/5 rounded-lg">
-                            <Film size={20} className="text-gray-400" />
-                        </div>
+                        <div className="p-2 bg-white/5 rounded-lg"><Film size={20} className="text-gray-400" /></div>
                         <div>
                             <p className="text-2xl font-bold text-white">{totalReels}</p>
                             <p className="text-xs text-gray-500">Total Reels</p>
@@ -265,9 +424,7 @@ const ReelsManager = () => {
                 </div>
                 <div className="bg-[#111] border border-pink-500/20 rounded-xl p-4">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-pink-500/10 rounded-lg">
-                            <Instagram size={20} className="text-pink-400" />
-                        </div>
+                        <div className="p-2 bg-pink-500/10 rounded-lg"><Instagram size={20} className="text-pink-400" /></div>
                         <div>
                             <p className="text-2xl font-bold text-white">{linkedReels}</p>
                             <p className="text-xs text-gray-500">With Links</p>
@@ -276,9 +433,7 @@ const ReelsManager = () => {
                 </div>
                 <div className="bg-[#111] border border-white/5 rounded-xl p-4">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-white/5 rounded-lg">
-                            <LinkIcon size={20} className="text-gray-400" />
-                        </div>
+                        <div className="p-2 bg-white/5 rounded-lg"><LinkIcon size={20} className="text-gray-400" /></div>
                         <div>
                             <p className="text-2xl font-bold text-white">{totalReels - linkedReels}</p>
                             <p className="text-xs text-gray-500">Missing Links</p>
@@ -306,42 +461,36 @@ const ReelsManager = () => {
                         <Film size={32} className="text-gray-600" />
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">No reels found</h3>
-                    <p className="text-gray-500">Try adjusting your search term.</p>
+                    <p className="text-gray-500">Try adjusting your search term or upload a new video.</p>
                 </div>
             ) : (
                 <div className="grid gap-3">
-                    {displayedReels.map((reel, displayIndex) => {
-                        // Find the actual index in the full array
+                    {displayedReels.map((reel) => {
                         const actualIndex = reelsData.indexOf(reel);
                         return (
-                            <ReelRow
-                                key={actualIndex}
-                                reel={reel}
-                                index={actualIndex}
-                                onSave={updateReelLink}
-                            />
+                            <div key={actualIndex} className="relative group">
+                                <ReelRow reel={reel} index={actualIndex} onSave={updateReelLink} />
+                                <button
+                                    onClick={() => handleDeleteReel(actualIndex)}
+                                    className="absolute top-3 right-3 p-1.5 bg-red-500/10 hover:bg-red-500/30 border border-red-500/20 rounded-lg text-red-400 hover:text-red-300 opacity-0 group-hover:opacity-100 transition-all z-10"
+                                    title="Delete Reel"
+                                >
+                                    <X size={14} />
+                                </button>
+                            </div>
                         );
                     })}
                 </div>
             )}
 
-            {/* Show More / Less */}
             {hasMore && (
-                <button
-                    onClick={() => setShowAll(true)}
-                    className="w-full py-3 text-sm font-medium text-gray-400 hover:text-white bg-[#111] border border-white/5 rounded-xl hover:border-white/10 transition-all flex items-center justify-center gap-2"
-                >
-                    <ChevronDown size={16} />
-                    Show All {filteredReels.length} Reels
+                <button onClick={() => setShowAll(true)} className="w-full py-3 text-sm font-medium text-gray-400 hover:text-white bg-[#111] border border-white/5 rounded-xl hover:border-white/10 transition-all flex items-center justify-center gap-2">
+                    <ChevronDown size={16} /> Show All {filteredReels.length} Reels
                 </button>
             )}
             {showAll && !searchTerm && filteredReels.length > 10 && (
-                <button
-                    onClick={() => setShowAll(false)}
-                    className="w-full py-3 text-sm font-medium text-gray-400 hover:text-white bg-[#111] border border-white/5 rounded-xl hover:border-white/10 transition-all flex items-center justify-center gap-2"
-                >
-                    <ChevronUp size={16} />
-                    Show Less
+                <button onClick={() => setShowAll(false)} className="w-full py-3 text-sm font-medium text-gray-400 hover:text-white bg-[#111] border border-white/5 rounded-xl hover:border-white/10 transition-all flex items-center justify-center gap-2">
+                    <ChevronUp size={16} /> Show Less
                 </button>
             )}
         </div>

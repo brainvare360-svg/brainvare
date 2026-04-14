@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { motion, useMotionValue, useAnimationFrame, AnimatePresence } from 'framer-motion';
 import { Instagram, Play, X, Volume2, VolumeX } from 'lucide-react';
 import { useReels } from '../../context/ReelsContext';
@@ -13,38 +13,17 @@ const chunkArray = (arr, parts) => {
 };
 
 const HorizontalMarquee = ({ items, direction = 1, speed = 40, onVideoClick }) => {
-    const x = useMotionValue(0);
-    const [isHovered, setIsHovered] = useState(false);
-
-    useAnimationFrame((t, delta) => {
-        if (isHovered) return;
-
-        const moveBy = direction * (speed * (delta / 1000));
-        let newX = x.get() + moveBy;
-
-        const contentWidth = items.length * 220;
-
-        if (direction > 0 && newX > 0) {
-            newX = -contentWidth / 2;
-        } else if (direction < 0 && newX < -contentWidth / 2) {
-            newX = 0;
-        }
-
-        x.set(newX);
-    });
-
     return (
-        <div className="flex overflow-hidden relative w-full">
-            <motion.div
-                className="flex gap-4 min-w-max"
-                style={{ x }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+        <div className="flex overflow-hidden relative w-full group/marquee">
+            <div
+                className={`flex gap-4 min-w-max hover:[animation-play-state:paused] ${direction === 1 ? 'animate-marquee-right' : 'animate-marquee-left'}`}
+                style={{ '--duration': `${speed}s`, willChange: 'transform' }}
             >
-                {items.map((item) => (
-                    <ReelCard key={item.id} item={item} onClick={() => onVideoClick(item)} />
+                {/* Double the items to ensure seamless pure CSS looping */}
+                {[...items, ...items].map((item, index) => (
+                    <ReelCard key={`${item.id}-${index}`} item={item} onClick={() => onVideoClick(item)} />
                 ))}
-            </motion.div>
+            </div>
         </div>
     );
 };
@@ -58,12 +37,10 @@ const ReelCard = ({ item, onClick }) => {
 
     return (
         <motion.div
-            layoutId={`video-${item.id}`}
             whileHover={{ scale: 1.05, opacity: 1, zIndex: 10 }}
             className="relative w-[140px] sm:w-[160px] md:w-[200px] aspect-[9/16] rounded-lg overflow-hidden bg-gray-900 border border-white/10 cursor-pointer shadow-lg group opacity-90 transition-all flex-shrink-0"
             onClick={onClick}
         >
-            {/* Video showing frame at 0.5s via media fragment to avoid network crashing */}
             <video
                 src={`${item.video}#t=0.5`}
                 muted
@@ -71,14 +48,12 @@ const ReelCard = ({ item, onClick }) => {
                 preload="metadata"
                 className="w-full h-full object-cover"
             />
-
             {/* Play Icon Overlay */}
             <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
                 <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/40 group-hover:scale-110 transition-all">
                     <Play className="w-4 h-4 md:w-6 md:h-6 text-white ml-0.5" fill="white" />
                 </div>
             </div>
-
             {/* Link Icon Overlay */}
             <button
                 onClick={handleInstagramClick}
@@ -100,11 +75,15 @@ const FullScreenPlayer = ({ video, onClose }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
             onClick={onClose}
         >
             <motion.div
-                layoutId={`video-${video.id}`}
+                initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 className="relative h-full max-h-[90vh] aspect-[9/16] rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/10"
                 onClick={(e) => e.stopPropagation()}
             >
@@ -118,25 +97,22 @@ const FullScreenPlayer = ({ video, onClose }) => {
                     className="w-full h-full object-cover"
                 />
 
-                {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full bg-black/40 hover:bg-white/20 text-white backdrop-blur-md transition-colors"
+                    className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full bg-black/40 hover:bg-white/20 text-white backdrop-blur-md transition-colors z-50"
                 >
                     <X size={20} className="md:hidden" />
                     <X size={24} className="hidden md:block" />
                 </button>
 
-                {/* Mute/Unmute Button */}
                 <button
                     onClick={() => setIsMuted(!isMuted)}
-                    className="absolute bottom-20 md:bottom-24 right-4 md:right-6 p-2 md:p-3 rounded-full bg-black/40 hover:bg-white/20 text-white backdrop-blur-md transition-colors"
+                    className="absolute bottom-20 md:bottom-24 right-4 md:right-6 p-2 md:p-3 rounded-full bg-black/40 hover:bg-white/20 text-white backdrop-blur-md transition-colors z-50"
                 >
                     {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
                 </button>
 
-                {/* Bottom Info Bar */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-black via-black/70 to-transparent">
+                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-black via-black/70 to-transparent z-40">
                     {video.instagram && video.instagram.trim() !== '' && (
                         <a
                             href={video.instagram}
@@ -157,27 +133,45 @@ const FullScreenPlayer = ({ video, onClose }) => {
 const ReelsWall = () => {
     const { reelsData } = useReels();
     const [selectedVideo, setSelectedVideo] = useState(null);
+    const [hasIntersected, setHasIntersected] = useState(false);
+    const observerRef = useRef(null);
 
-    // Compute expanded list and rows from context data
+    // Compute rows from context data without redundant expansion
     const rows = useMemo(() => {
-        // We ensure we only compute on the base array
-        const REPEAT_COUNT = 2;
-        // Check if reelsData is empty or not an array to avoid errors
         if (!reelsData || !Array.isArray(reelsData) || reelsData.length === 0) {
             return [[], [], []];
         }
         
-        const expandedList = Array(REPEAT_COUNT).fill(reelsData).flat().map((item, i) => ({
+        // HorizontalMarquee already duplicates the array for CSS looping,
+        // so we don't need to do it here. 
+        const mappedList = reelsData.map((item, i) => ({
             id: i,
             video: item.video,
             instagram: item.instagram,
         }));
         
-        return chunkArray(expandedList, 3);
+        return chunkArray(mappedList, 3);
     }, [reelsData]);
 
+    // Lazy load the heavy video DOM elements only when scrolled near view
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    setHasIntersected(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: "600px 0px" } // Load slightly before it comes into view
+        );
+        if (observerRef.current) {
+            observer.observe(observerRef.current);
+        }
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <section className="py-16 md:py-24 bg-brand-dark overflow-hidden relative z-10 min-h-screen flex flex-col justify-center">
+        <section ref={observerRef} className="py-16 md:py-24 bg-brand-dark overflow-hidden relative z-10 min-h-screen flex flex-col justify-center">
             <div className="container mx-auto px-4 md:px-6 mb-8 md:mb-12 text-center relative z-20 shrink-0">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -195,10 +189,14 @@ const ReelsWall = () => {
             </div>
 
             {/* Horizontal Marquee Container */}
-            <div className="flex flex-col gap-6 relative mask-gradient-horizontal w-full">
-                <HorizontalMarquee items={rows[0]} direction={-1} speed={50} onVideoClick={setSelectedVideo} />
-                <HorizontalMarquee items={rows[1]} direction={1} speed={40} onVideoClick={setSelectedVideo} />
-                <HorizontalMarquee items={rows[2]} direction={-1} speed={60} onVideoClick={setSelectedVideo} />
+            <div className="flex flex-col gap-6 relative mask-gradient-horizontal w-full min-h-[400px]">
+                {hasIntersected && (
+                    <>
+                        <HorizontalMarquee items={rows[0]} direction={-1} speed={50} onVideoClick={setSelectedVideo} />
+                        <HorizontalMarquee items={rows[1]} direction={1} speed={40} onVideoClick={setSelectedVideo} />
+                        <HorizontalMarquee items={rows[2]} direction={-1} speed={60} onVideoClick={setSelectedVideo} />
+                    </>
+                )}
             </div>
 
             <AnimatePresence>
