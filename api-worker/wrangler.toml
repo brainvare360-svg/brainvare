@@ -6,12 +6,12 @@ compatibility_date = "2024-09-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "brainvare-db"
-database_id = "REPLACE_AFTER_CREATION"
+database_id = "41551d14-3fe0-4b09-89f3-a53e6d6ecc81"
 
 # ── KV Namespace (content + pages) ──────────────────────
 [[kv_namespaces]]
 binding = "KV"
-id = "REPLACE_AFTER_CREATION"
+id = "cb24419df64942bb86bacfb8c89043ec"
 
 # ── R2 Bucket (video reels) ─────────────────────────────
 [[r2_buckets]]
