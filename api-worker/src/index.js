@@ -9,8 +9,10 @@ const ALLOWED_ORIGINS = [
     'https://www.brainvare.com',
     'https://test.brainvare.com',
     'https://brainvare-site.pages.dev',
+    'https://dev.brainvare-site.pages.dev',
     'http://localhost:5173',
     'http://localhost:4173',
+    'http://localhost:5174',
 ];
 
 app.use('*', cors({
