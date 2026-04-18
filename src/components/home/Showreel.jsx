@@ -20,7 +20,6 @@ const Showreel = () => {
     });
 
     const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
-    const opacity = useTransform(scrollYProgress, [0, 0.3, 0.8, 1], [0, 1, 1, 0]);
 
     const toggleMute = () => {
         if (videoRef.current) {
@@ -30,10 +29,10 @@ const Showreel = () => {
     };
 
     return (
-        <section ref={containerRef} className="h-[60vh] md:h-[70vh] lg:h-[80vh] py-10 md:py-16 lg:py-20 flex items-center justify-center bg-transparent relative z-20">
+        <section ref={containerRef} className="h-screen w-full relative z-20 flex items-center justify-center bg-brand-dark overflow-hidden py-0">
             <motion.div
-                style={{ scale, opacity }}
-                className="w-[95%] md:w-[90%] lg:w-[80%] h-full relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-brand-red/10 border border-white/10 group"
+                style={{ scale }}
+                className="w-full h-full relative group shadow-2xl"
             >
                 <video
                     ref={videoRef}
