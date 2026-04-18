@@ -35,13 +35,8 @@ const ProjectCard = ({ project, index }) => {
 
     const handleMouseEnter = () => {
         setIsHovered(true);
-        const vid = videoRef.current;
-        if (vid) {
-            // Only assign src on first hover — no video bytes until interaction
-            if (!vid.src || vid.src === window.location.href) {
-                vid.src = project.video;
-            }
-            vid.play().catch(e => console.log('Play failed', e));
+        if (videoRef.current) {
+            videoRef.current.play().catch(e => console.log("Play failed", e));
         }
     };
 
@@ -65,18 +60,16 @@ const ProjectCard = ({ project, index }) => {
             <img
                 src={project.image}
                 alt={project.title}
-                loading="lazy"
-                decoding="async"
                 className={`w-full h-full object-cover transition-opacity duration-500 absolute inset-0 ${isHovered ? 'opacity-0' : 'opacity-100'}`}
             />
 
-            {/* Background Video — src assigned on hover only */}
+            {/* Background Video */}
             <video
                 ref={videoRef}
+                src={project.video}
                 muted
                 loop
                 playsInline
-                preload="none"
                 className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
             />
 

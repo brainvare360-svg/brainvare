@@ -43,23 +43,12 @@ const Agency = () => {
                     <h2 className="text-4xl font-bold mb-16">The Leadership</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl">
                         {[
-                            { name: 'Arun AG', role: 'Founder', webp: '/Arun AG.webp', fallback: '/Arun AG.opt.png' },
-                            { name: 'Anila G Nair', role: 'Co-founder', webp: '/Anila G Nair.webp', fallback: '/Anila G Nair.opt.png' }
+                            { name: 'Arun AG', role: 'Founder', image: '/Arun AG.png' },
+                            { name: 'Anila G Nair', role: 'Co-founder', image: '/Anila G Nair.png' }
                         ].map((person, i) => (
                             <div key={i} className="group">
                                 <div className="aspect-[3/4] bg-[#1a1a1a] rounded-xl mb-6 overflow-hidden relative">
-                                    <picture>
-                                        <source srcSet={person.webp} type="image/webp" />
-                                        <img
-                                            src={person.fallback}
-                                            alt={person.name}
-                                            loading="lazy"
-                                            decoding="async"
-                                            width="800"
-                                            height="1067"
-                                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
-                                    </picture>
+                                    <img src={person.image} alt={person.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
                                 </div>
                                 <h3 className="text-xl font-bold">{person.name}</h3>

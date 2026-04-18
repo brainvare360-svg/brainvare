@@ -1,77 +1,35 @@
-import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Play, X, Volume2, VolumeX } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Play } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
-
-// Fullscreen video player — only mounts when user clicks "Watch Reel"
-const VideoOverlay = ({ src, onClose }) => {
-    const [isMuted, setIsMuted] = useState(false);
-    return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex items-center justify-center"
-            onClick={onClose}
-        >
-            <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                className="relative w-full max-w-5xl aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl"
-                onClick={(e) => e.stopPropagation()}
-            >
-                {/* Video only created when overlay is open */}
-                <video
-                    src={src}
-                    autoPlay
-                    loop
-                    muted={isMuted}
-                    playsInline
-                    preload="auto"
-                    className="w-full h-full object-cover"
-                />
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 p-2 rounded-full bg-black/50 text-white hover:bg-white/20 backdrop-blur-md transition-colors z-10"
-                >
-                    <X size={22} />
-                </button>
-                <button
-                    onClick={() => setIsMuted(m => !m)}
-                    className="absolute bottom-4 right-4 p-2 rounded-full bg-black/50 text-white hover:bg-white/20 backdrop-blur-md transition-colors z-10"
-                >
-                    {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-                </button>
-            </motion.div>
-        </motion.div>
-    );
-};
 
 const Hero = () => {
     const { content } = useContent();
     const { hero } = content;
-    const [showVideo, setShowVideo] = useState(false);
-
-    const videoSrc = hero?.videoUrl || 'https://cdn.pixabay.com/video/2023/04/23/160109-820542385_large.mp4';
 
     return (
         <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-dark">
-            {/* Pure CSS background — zero network requests */}
-            <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-black to-gray-900" />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/60 to-transparent" />
-                {/* Ambient glow orbs */}
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-red/10 rounded-full blur-[120px] pointer-events-none" />
-                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-900/10 rounded-full blur-[100px] pointer-events-none" />
+            {/* Background Video */}
+            <div className="absolute inset-0 overflow-hidden">
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover opacity-60 mix-blend-overlay"
+                >
+                    <source src={hero?.videoUrl || "https://cdn.pixabay.com/video/2023/04/23/160109-820542385_large.mp4"} type="video/mp4" />
+                    {/* Fallback for browsers that don't support video */}
+                </video>
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/50 to-transparent" />
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 transform-gpu translate-z-0 will-change-transform pointer-events-none" />
             </div>
 
             <div className="relative z-10 container mx-auto px-6 text-center">
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                     className="max-w-4xl mx-auto"
                 >
                     <motion.div
@@ -84,11 +42,11 @@ const Hero = () => {
                     </motion.div>
 
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter leading-tight mb-6 md:mb-8">
-                        <span className="whitespace-pre-line">{hero?.title || 'We Build Digital Futures.'}</span>
+                        <span className="whitespace-pre-line">{hero?.title || "We Build Digital Futures."}</span>
                     </h1>
 
                     <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed px-2 md:px-0">
-                        {hero?.subtitle || 'Brainvare is an AI-first creative studio integrating data, design, and technology to scale your brand.'}
+                        {hero?.subtitle || "Brainvare is an AI-first creative studio integrating data, design, and technology to scale your brand."}
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
@@ -101,11 +59,9 @@ const Hero = () => {
                             <ArrowRight className="relative z-10 w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                         </motion.button>
 
-                        {/* Watch Reel — video ONLY loads when this is clicked */}
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => setShowVideo(true)}
                             className="px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 flex items-center gap-2 md:gap-3 font-medium text-white transition-colors text-sm md:text-base"
                         >
                             <Play className="w-4 h-4 fill-current" />
@@ -124,13 +80,6 @@ const Hero = () => {
             >
                 <div className="w-[1px] h-12 md:h-20 bg-gradient-to-b from-white/0 via-white/50 to-white/0" />
             </motion.div>
-
-            {/* Video overlay — only mounts on click, zero cost on page load */}
-            <AnimatePresence>
-                {showVideo && (
-                    <VideoOverlay src={videoSrc} onClose={() => setShowVideo(false)} />
-                )}
-            </AnimatePresence>
         </section>
     );
 };

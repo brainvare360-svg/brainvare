@@ -1,46 +1,21 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import {
-    ArrowUpRight, HelpCircle,
-    // Commonly used service icons — add more here if your CMS uses them
-    Brain, Code, Globe, Rocket, Palette, Zap, Search, Bot,
-    BarChart3, TrendingUp, Layout, Layers, Database, Shield,
-    Smartphone, Monitor, PenTool, Lightbulb, Target, Users
-} from 'lucide-react';
+import * as Icons from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 
-// Targeted icon map — only the icons that are actually used get bundled
-const ICON_MAP = {
-    Brain, Code, Globe, Rocket, Palette, Zap, Search, Bot,
-    BarChart3, TrendingUp, Layout, Layers, Database, Shield,
-    Smartphone, Monitor, PenTool, Lightbulb, Target, Users,
-    HelpCircle
-};
-
 const getIcon = (iconName) => {
+    // If it's already a React element (e.g. default data before save), return it
     if (React.isValidElement(iconName)) return iconName;
-    const IconComponent = ICON_MAP[iconName] || HelpCircle;
+
+    // If it's a string, look it up
+    const IconComponent = Icons[iconName] || Icons.HelpCircle;
     return <IconComponent className="w-8 h-8" />;
 };
 
 const ServiceCard = ({ service, index }) => {
     const [isHovered, setIsHovered] = useState(false);
     const videoRef = useRef(null);
-
-    // Only assign video src on first hover — zero network cost before interaction
-    const handleMouseEnter = () => {
-        setIsHovered(true);
-        const vid = videoRef.current;
-        if (vid && !vid.src) {
-            vid.src = service.video || 'https://cdn.pixabay.com/video/2023/10/12/184734-874284566_large.mp4';
-        }
-        vid?.play().catch(() => {});
-    };
-
-    const handleMouseLeave = () => {
-        setIsHovered(false);
-        videoRef.current?.pause();
-    };
 
     return (
         <motion.div
@@ -49,18 +24,24 @@ const ServiceCard = ({ service, index }) => {
             transition={{ delay: index * 0.1, duration: 0.6 }}
             viewport={{ once: true }}
             className="group relative h-[280px] md:h-[320px] rounded-xl md:rounded-2xl bg-white/5 border border-white/10 overflow-hidden cursor-pointer w-full transition-all duration-500 hover:scale-[1.02] hover:border-white/20"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            onMouseEnter={() => {
+                setIsHovered(true);
+                videoRef.current?.play().catch(() => { });
+            }}
+            onMouseLeave={() => {
+                setIsHovered(false);
+                videoRef.current?.pause();
+            }}
         >
             {/* Dynamic Background Layer */}
             <div className="absolute inset-0 z-0">
-                {/* Video Background — src assigned only on hover */}
+                {/* Video Background */}
                 <video
                     ref={videoRef}
+                    src={service.video || "https://cdn.pixabay.com/video/2023/10/12/184734-874284566_large.mp4"}
                     muted
                     loop
                     playsInline
-                    preload="none"
                     className="w-full h-full object-cover opacity-0 group-hover:opacity-40 transition-opacity duration-700 mix-blend-overlay"
                 />
 
