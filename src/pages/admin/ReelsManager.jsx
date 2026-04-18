@@ -172,10 +172,7 @@ const ReelRow = ({ reel, index, onSave }) => {
     );
 };
 
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../../firebase';
-
-const WORKER_URL = 'https://brainvare-r2-uploader.brainvare.workers.dev';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const ReelsManager = () => {
     const { reelsData, updateReelLink, addReel, removeReel, resetReels } = useReels();
@@ -196,9 +193,10 @@ const ReelsManager = () => {
         setSyncing(true);
         setSyncSuccess(false);
         try {
-            const res = await fetch(`${WORKER_URL}/reels`, {
+            const token = localStorage.getItem('brainvare_auth_token');
+            const res = await fetch(`${API_URL}/reels`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ items: reelsData }),
             });
             if (!res.ok) throw new Error(await res.text());
@@ -245,7 +243,9 @@ const ReelsManager = () => {
                     }
                 });
                 xhr.addEventListener('error', () => reject(new Error('Network error')));
-                xhr.open('POST', `${WORKER_URL}/upload`);
+                const token = localStorage.getItem('brainvare_auth_token');
+                xhr.open('POST', `${API_URL}/upload`);
+                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
                 xhr.send(formData);
             });
 
@@ -271,7 +271,11 @@ const ReelsManager = () => {
         if (reel.video.includes('r2.dev/reels/')) {
             try {
                 const key = 'reels/' + reel.video.split('/reels/').pop();
-                await fetch(`${WORKER_URL}/delete?key=${encodeURIComponent(key)}`, { method: 'DELETE' });
+                const token = localStorage.getItem('brainvare_auth_token');
+                await fetch(`${API_URL}/delete?key=${encodeURIComponent(key)}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                });
             } catch (e) {
                 console.warn('Could not delete from R2:', e);
             }

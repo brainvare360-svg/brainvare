@@ -26,22 +26,7 @@ const Login = () => {
             await login(email, password);
             navigate(from, { replace: true });
         } catch (err) {
-            switch (err.code) {
-                case 'auth/invalid-credential':
-                case 'auth/wrong-password':
-                case 'auth/user-not-found':
-                    setError('Invalid email or password.');
-                    break;
-                case 'auth/too-many-requests':
-                    setError('Too many attempts. Please try again later.');
-                    break;
-                case 'auth/invalid-email':
-                    setError('Please enter a valid email address.');
-                    break;
-                default:
-                    setError('Login failed. Please try again.');
-                    console.error('Login error:', err);
-            }
+            setError(err.message || 'Login failed. Please try again.');
         } finally {
             setLoading(false);
         }

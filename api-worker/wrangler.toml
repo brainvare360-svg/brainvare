@@ -1,0 +1,24 @@
+name = "brainvare-api"
+main = "src/index.js"
+compatibility_date = "2024-09-01"
+
+# ── D1 Database (enquiries) ──────────────────────────────
+[[d1_databases]]
+binding = "DB"
+database_name = "brainvare-db"
+database_id = "REPLACE_AFTER_CREATION"
+
+# ── KV Namespace (content + pages) ──────────────────────
+[[kv_namespaces]]
+binding = "KV"
+id = "REPLACE_AFTER_CREATION"
+
+# ── R2 Bucket (video reels) ─────────────────────────────
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "brainvare-cdn"
+
+# Secrets (set via `wrangler secret put`):
+# - ADMIN_EMAIL
+# - ADMIN_PASSWORD_HASH
+# - JWT_SECRET
