@@ -4,11 +4,13 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import PublicLayout from './layouts/PublicLayout';
 import AdminLayout from './layouts/AdminLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 import DashboardHome from './pages/admin/DashboardHome';
 import ContentManager from './pages/admin/ContentManager';
 import EnquiriesManager from './pages/admin/EnquiriesManager';
 import PagesManager from './pages/admin/PagesManager';
 import ReelsManager from './pages/admin/ReelsManager';
+import Login from './pages/admin/Login';
 import Lenis from 'lenis';
 
 import Home from './pages/Home';
@@ -62,8 +64,15 @@ function App() {
           <Route path="/insights" element={<Insights />} />
         </Route>
 
-        {/* Admin Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
+        {/* Admin Login — outside protection */}
+        <Route path="/admin/login" element={<Login />} />
+
+        {/* Admin Routes — protected */}
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }>
           <Route index element={<DashboardHome />} />
           <Route path="enquiries" element={<EnquiriesManager />} />
           <Route path="pages" element={<PagesManager />} />
@@ -77,3 +86,4 @@ function App() {
 }
 
 export default App;
+

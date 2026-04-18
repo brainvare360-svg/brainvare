@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 
 const WORKER_URL = 'https://brainvare-r2-uploader.brainvare.workers.dev';
+const R2_AUTH_HEADER = { 'Authorization': `Bearer ${import.meta.env.VITE_R2_API_SECRET}` };
 
 // Default reels data (matches the original hardcoded list)
 const defaultReelsData = [
@@ -76,7 +77,7 @@ export const ReelsProvider = ({ children }) => {
                         // R2 is empty and no localStorage — seed it with defaults
                         await fetch(`${WORKER_URL}/reels`, {
                             method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 'Content-Type': 'application/json', ...R2_AUTH_HEADER },
                             body: JSON.stringify({ items: defaultReelsData }),
                         });
                     }
@@ -107,7 +108,7 @@ export const ReelsProvider = ({ children }) => {
             try {
                 const res = await fetch(`${WORKER_URL}/reels`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', ...R2_AUTH_HEADER },
                     body: JSON.stringify({ items: reelsData }),
                 });
                 if (res.ok) {
@@ -147,7 +148,7 @@ export const ReelsProvider = ({ children }) => {
             try {
                 await fetch(`${WORKER_URL}/reels`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', ...R2_AUTH_HEADER },
                     body: JSON.stringify({ items: defaultReelsData }),
                 });
             } catch (e) {

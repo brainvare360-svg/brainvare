@@ -3,6 +3,7 @@ const ALLOWED_ORIGINS = [
 	'https://www.brainvare.com',
 	'https://brainvare-website.web.app',
 	'https://brainvare-website.firebaseapp.com',
+	'https://brainvare-site.pages.dev',
 	'http://localhost:5173',
 	'http://localhost:4173',
 ];
@@ -13,9 +14,21 @@ function corsHeaders(request) {
 	return {
 		'Access-Control-Allow-Origin': allowed,
 		'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-		'Access-Control-Allow-Headers': 'Content-Type',
+		'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 		'Access-Control-Max-Age': '86400',
 	};
+}
+
+// Auth check for write operations (PUT, POST, DELETE)
+function requireAuth(request, env) {
+	const authHeader = request.headers.get('Authorization');
+	if (!authHeader || authHeader !== `Bearer ${env.API_SECRET}`) {
+		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+			status: 401,
+			headers: { 'Content-Type': 'application/json', ...corsHeaders(request) },
+		});
+	}
+	return null; // authorized
 }
 
 const METADATA_KEY = 'data/reels.json';
@@ -28,7 +41,7 @@ export default {
 
 		const url = new URL(request.url);
 
-		// GET /reels — Load reels metadata from R2
+		// GET /reels — Load reels metadata from R2 (public — no auth needed)
 		if (request.method === 'GET' && url.pathname === '/reels') {
 			try {
 				const obj = await env.BUCKET.get(METADATA_KEY);
@@ -51,8 +64,11 @@ export default {
 			}
 		}
 
-		// PUT /reels — Save reels metadata to R2
+		// PUT /reels — Save reels metadata to R2 (requires auth)
 		if (request.method === 'PUT' && url.pathname === '/reels') {
+			const authError = requireAuth(request, env);
+			if (authError) return authError;
+
 			try {
 				const body = await request.text();
 				// Validate it's valid JSON
@@ -72,8 +88,11 @@ export default {
 			}
 		}
 
-		// POST /upload — Upload a video to R2
+		// POST /upload — Upload a video to R2 (requires auth)
 		if (request.method === 'POST' && url.pathname === '/upload') {
+			const authError = requireAuth(request, env);
+			if (authError) return authError;
+
 			try {
 				const formData = await request.formData();
 				const file = formData.get('video');
@@ -115,8 +134,11 @@ export default {
 			}
 		}
 
-		// DELETE /delete?key=reels/filename.mp4
+		// DELETE /delete?key=reels/filename.mp4 (requires auth)
 		if (request.method === 'DELETE' && url.pathname === '/delete') {
+			const authError = requireAuth(request, env);
+			if (authError) return authError;
+
 			try {
 				const key = url.searchParams.get('key');
 
