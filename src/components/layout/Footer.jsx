@@ -32,8 +32,8 @@ const Footer = () => {
                     <div>
                         <h4 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Contact</h4>
                         <div className="space-y-3 md:space-y-4 text-gray-400 text-sm md:text-base">
-                            <p>hello@brainvare.com</p>
-                            <p>+91 987 654 3210</p>
+                            <p><a href="mailto:care@brainvare.com" className="hover:text-white transition-colors">care@brainvare.com</a></p>
+                            <p><a href="tel:+918075098869" className="hover:text-white transition-colors">+91 80750 98869</a></p>
                             <p>Kochi, Kerala, India</p>
                         </div>
                     </div>
