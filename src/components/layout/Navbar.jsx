@@ -28,7 +28,7 @@ const Navbar = () => {
             subItems: ['Selected Case Studies', 'Showreels 2024', 'Client Roster', 'Awards & Recognition']
         },
         {
-            name: 'Agency',
+            name: 'About',
             path: '/about',
             subItems: ['Our Story', 'Leadership Team', 'Careers', 'Press & Media']
         },
