@@ -180,10 +180,10 @@ const ReelsWall = () => {
                     viewport={{ once: true }}
                 >
                     <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-bold tracking-tighter mb-2 md:mb-4 text-white">
-                        Infinite <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-purple-600">Feed.</span>
+                        Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-purple-600">Work.</span>
                     </h2>
                     <p className="text-base md:text-lg lg:text-xl text-gray-400 max-w-xl mx-auto">
-                        Explore our global network of creators.
+                        Explore our portfolio of AI-powered creative and development projects.
                     </p>
                 </motion.div>
             </div>
