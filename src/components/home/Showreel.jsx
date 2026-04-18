@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 
@@ -7,6 +7,13 @@ const Showreel = () => {
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(true);
     const [isMuted, setIsMuted] = useState(true);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -42,7 +49,7 @@ const Showreel = () => {
             >
                 <video
                     ref={videoRef}
-                    src="/agency-showreel.mp4"
+                    src={isMobile ? "/agency-showreel-mobile.mp4" : "/agency-showreel.mp4"}
                     className="w-full h-full object-cover"
                     autoPlay
                     loop
