@@ -2,6 +2,10 @@ node_modules
 dist
 .firebase
 *.log
-.env
+
+# Local-only overrides (never commit these)
 .env.local
-sync-reels.mjs
+.env.*.local
+
+# .env.production and .env.development are intentionally tracked in Git
+# Cloudflare Pages reads them at build time
