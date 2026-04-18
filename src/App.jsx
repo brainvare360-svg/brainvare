@@ -17,7 +17,6 @@ import Home from './pages/Home';
 import Services from './pages/Services';
 import Work from './pages/Work';
 import Agency from './pages/Agency';
-import Insights from './pages/Insights';
 import BlogList from './pages/BlogList';
 import BlogPost from './pages/BlogPost';
 
@@ -63,7 +62,6 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/work" element={<Work />} />
           <Route path="/about" element={<Agency />} />
-          <Route path="/insights" element={<Insights />} />
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
         </Route>

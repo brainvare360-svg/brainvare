@@ -33,11 +33,6 @@ const Navbar = () => {
             subItems: ['Our Story', 'Leadership Team', 'Careers', 'Press & Media']
         },
         {
-            name: 'Insights',
-            path: '/insights',
-            subItems: ['Latest Articles', 'Trend Reports', 'Whitepapers', 'Newsletter']
-        },
-        {
             name: 'Blog',
             path: '/blog',
             subItems: ['AI Marketing Tools', 'SEO & AEO', 'Content Strategy', 'All Articles']
