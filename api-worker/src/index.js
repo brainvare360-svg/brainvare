@@ -7,6 +7,7 @@ const app = new Hono();
 const ALLOWED_ORIGINS = [
     'https://brainvare.com',
     'https://www.brainvare.com',
+    'https://test.brainvare.com',
     'https://brainvare-site.pages.dev',
     'http://localhost:5173',
     'http://localhost:4173',
