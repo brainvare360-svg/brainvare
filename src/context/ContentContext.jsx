@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import { defaultContent } from './contentData';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const FIRESTORE_DOC = doc(db, 'siteData', 'content');
 
 const ContentContext = createContext();
 
@@ -18,19 +20,33 @@ export const ContentProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const isInitialLoad = useRef(true);
 
-    // Load from API on mount
+    // Load from Firestore on mount
     useEffect(() => {
         const loadContent = async () => {
             try {
-                const res = await fetch(`${API_URL}/content`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data && Object.keys(data).length > 0) {
-                        setContent({ ...defaultContent, ...data });
+                let localDataToMigrate = defaultContent;
+                try {
+                    const saved = localStorage.getItem('brainvare_content');
+                    if (saved) {
+                        localDataToMigrate = { ...defaultContent, ...JSON.parse(saved) };
+                        setContent(localDataToMigrate);
                     }
+                } catch (e) { }
+
+                const snap = await getDoc(FIRESTORE_DOC);
+                if (snap.exists()) {
+                    setContent({ ...defaultContent, ...snap.data() });
+                } else {
+                    // First time: seed Firestore with local data
+                    await setDoc(FIRESTORE_DOC, localDataToMigrate);
                 }
             } catch (error) {
-                console.error("Failed to load content from API:", error);
+                console.error("Failed to load content from Firestore:", error);
+                // Fallback to localStorage
+                try {
+                    const saved = localStorage.getItem('brainvare_content');
+                    if (saved) setContent({ ...defaultContent, ...JSON.parse(saved) });
+                } catch (e) { }
             } finally {
                 setLoading(false);
                 isInitialLoad.current = false;
@@ -39,23 +55,14 @@ export const ContentProvider = ({ children }) => {
         loadContent();
     }, []);
 
-    // Persist to API whenever content changes (skip initial load)
+    // Persist to Firestore whenever content changes (skip initial load)
     useEffect(() => {
         if (isInitialLoad.current) return;
         const save = async () => {
             try {
-                const token = localStorage.getItem('brainvare_auth_token');
-                if (!token) return; // Only save if admin is logged in
-                await fetch(`${API_URL}/content`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(content),
-                });
+                await setDoc(FIRESTORE_DOC, content);
             } catch (error) {
-                console.error("Failed to save content to API:", error);
+                console.error("Failed to save content to Firestore:", error);
             }
         };
         save();
@@ -110,17 +117,9 @@ export const ContentProvider = ({ children }) => {
         if (window.confirm('Are you sure you want to reset all content to defaults? This cannot be undone.')) {
             setContent(defaultContent);
             try {
-                const token = localStorage.getItem('brainvare_auth_token');
-                await fetch(`${API_URL}/content`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(defaultContent),
-                });
+                await setDoc(FIRESTORE_DOC, defaultContent);
             } catch (e) {
-                console.error("Failed to reset content:", e);
+                console.error("Failed to reset content in Firestore:", e);
             }
         }
     };

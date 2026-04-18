@@ -172,7 +172,10 @@ const ReelRow = ({ reel, index, onSave }) => {
     );
 };
 
-const API_URL = import.meta.env.VITE_API_URL;
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+
+const WORKER_URL = 'https://brainvare-r2-uploader.brainvare.workers.dev';
 
 const ReelsManager = () => {
     const { reelsData, updateReelLink, addReel, removeReel, resetReels } = useReels();
@@ -193,10 +196,9 @@ const ReelsManager = () => {
         setSyncing(true);
         setSyncSuccess(false);
         try {
-            const token = localStorage.getItem('brainvare_auth_token');
-            const res = await fetch(`${API_URL}/reels`, {
+            const res = await fetch(`${WORKER_URL}/reels`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ items: reelsData }),
             });
             if (!res.ok) throw new Error(await res.text());
@@ -243,9 +245,7 @@ const ReelsManager = () => {
                     }
                 });
                 xhr.addEventListener('error', () => reject(new Error('Network error')));
-                const token = localStorage.getItem('brainvare_auth_token');
-                xhr.open('POST', `${API_URL}/upload`);
-                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                xhr.open('POST', `${WORKER_URL}/upload`);
                 xhr.send(formData);
             });
 
@@ -271,11 +271,7 @@ const ReelsManager = () => {
         if (reel.video.includes('r2.dev/reels/')) {
             try {
                 const key = 'reels/' + reel.video.split('/reels/').pop();
-                const token = localStorage.getItem('brainvare_auth_token');
-                await fetch(`${API_URL}/delete?key=${encodeURIComponent(key)}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` },
-                });
+                await fetch(`${WORKER_URL}/delete?key=${encodeURIComponent(key)}`, { method: 'DELETE' });
             } catch (e) {
                 console.warn('Could not delete from R2:', e);
             }

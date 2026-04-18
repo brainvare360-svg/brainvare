@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { collection, addDoc, updateDoc, deleteDoc, getDocs, doc, query, orderBy, onSnapshot, writeBatch } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const EnquiriesContext = createContext();
 
@@ -16,94 +16,83 @@ export const EnquiriesProvider = ({ children }) => {
     const [enquiries, setEnquiries] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Load enquiries from API (only if admin is authenticated)
-    const fetchEnquiries = async () => {
-        const token = localStorage.getItem('brainvare_auth_token');
-        if (!token) {
-            setLoading(false);
-            return;
-        }
-
-        try {
-            const res = await fetch(`${API_URL}/enquiries`, {
-                headers: { 'Authorization': `Bearer ${token}` },
-            });
-            if (res.ok) {
-                const data = await res.json();
-                setEnquiries(data);
-            }
-        } catch (error) {
-            console.error("Failed to load enquiries:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
+    // Setup real-time listener on mounting
     useEffect(() => {
-        fetchEnquiries();
+        const q = query(collection(db, 'enquiries'), orderBy('createdAt', 'desc'));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const enquiriesData = [];
+            querySnapshot.forEach((doc) => {
+                enquiriesData.push({ id: doc.id, ...doc.data() });
+            });
+            setEnquiries(enquiriesData);
+            setLoading(false);
+        }, (error) => {
+            console.error("Firebase real-time listener error:", error);
+            
+            // Fallback to localStorage if Firebase fails (offline or permission denied initially)
+            try {
+                const saved = localStorage.getItem('brainvare_enquiries');
+                if (saved) setEnquiries(JSON.parse(saved));
+            } catch (e) { }
+            
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
     }, []);
 
-    // Add a new enquiry (public — contact form)
-    const addEnquiry = async (enquiryData) => {
+    // Also persist to localStorage as backup
+    useEffect(() => {
         try {
-            const res = await fetch(`${API_URL}/enquiries`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(enquiryData),
-            });
-            if (!res.ok) throw new Error('Failed to submit enquiry');
-            const data = await res.json();
-
-            // Add to local state if admin is viewing
-            const newEnquiry = {
-                id: data.id,
-                ...enquiryData,
-                status: 'new',
-                created_at: new Date().toISOString(),
-            };
-            setEnquiries(prev => [newEnquiry, ...prev]);
+            if(!loading && enquiries.length > 0) {
+                 localStorage.setItem('brainvare_enquiries', JSON.stringify(enquiries));
+            }
         } catch (error) {
-            console.error("Error adding enquiry:", error);
-            throw error;
+           console.error("Failed to backup enquiries to localStorage", error);
+        }
+    }, [enquiries, loading]);
+
+    // Add a new enquiry
+    const addEnquiry = async (enquiryData) => {
+        const newEnquiry = {
+            ...enquiryData,
+            createdAt: new Date().toISOString(),
+            status: 'new' // new, read, replied
+        };
+        
+        try {
+           await addDoc(collection(db, 'enquiries'), newEnquiry);
+        } catch(error) {
+           console.error("Error adding document: ", error);
+           throw error; // Let the caller handle UI state
         }
     };
 
-    // Update enquiry status (admin only)
+    // Update enquiry status
     const updateEnquiryStatus = async (id, status) => {
         try {
-            const token = localStorage.getItem('brainvare_auth_token');
-            await fetch(`${API_URL}/enquiries/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ status }),
-            });
-            setEnquiries(prev =>
-                prev.map(e => e.id === id ? { ...e, status } : e)
-            );
+            const enquiryRef = doc(db, 'enquiries', id);
+            await updateDoc(enquiryRef, { status });
         } catch (error) {
-            console.error("Error updating enquiry:", error);
+            console.error("Error updating document: ", error);
         }
     };
 
-    // Delete an enquiry (admin only)
+    // Delete an enquiry
     const deleteEnquiry = async (id) => {
         try {
-            const token = localStorage.getItem('brainvare_auth_token');
-            await fetch(`${API_URL}/enquiries/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` },
-            });
-            setEnquiries(prev => prev.filter(e => e.id !== id));
+            await deleteDoc(doc(db, 'enquiries', id));
         } catch (error) {
-            console.error("Error deleting enquiry:", error);
+            console.error("Error deleting document: ", error);
         }
     };
 
-    const getEnquiry = (id) => enquiries.find(e => e.id === id);
+    // Get enquiry by ID
+    const getEnquiry = (id) => {
+        return enquiries.find(enquiry => enquiry.id === id);
+    };
 
+    // Get counts by status
     const getStats = () => {
         const total = enquiries.length;
         const newCount = enquiries.filter(e => e.status === 'new').length;
@@ -112,26 +101,32 @@ export const EnquiriesProvider = ({ children }) => {
         return { total, new: newCount, read: readCount, replied: repliedCount };
     };
 
+    // Clear all enquiries
     const clearAllEnquiries = async () => {
         if (window.confirm('Are you sure you want to delete all enquiries? This cannot be undone.')) {
             try {
-                const token = localStorage.getItem('brainvare_auth_token');
-                await fetch(`${API_URL}/enquiries`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` },
+                const batch = writeBatch(db);
+                enquiries.forEach((enquiry) => {
+                    const docRef = doc(db, 'enquiries', enquiry.id);
+                    batch.delete(docRef);
                 });
-                setEnquiries([]);
+                await batch.commit();
             } catch (error) {
-                console.error("Error clearing enquiries:", error);
+                console.error("Error batch deleting documents:", error);
             }
         }
     };
 
     return (
         <EnquiriesContext.Provider value={{
-            enquiries, loading, addEnquiry, updateEnquiryStatus,
-            deleteEnquiry, getEnquiry, getStats, clearAllEnquiries,
-            refreshEnquiries: fetchEnquiries
+            enquiries,
+            loading,
+            addEnquiry,
+            updateEnquiryStatus,
+            deleteEnquiry,
+            getEnquiry,
+            getStats,
+            clearAllEnquiries
         }}>
             {children}
         </EnquiriesContext.Provider>
