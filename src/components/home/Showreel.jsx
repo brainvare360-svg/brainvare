@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 
-const VIDEO_SRC = 'https://cdn.pixabay.com/video/2023/04/09/158169-816245084_large.mp4';
+const VIDEO_SRC = 'https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4';
 
 const Showreel = () => {
     const containerRef = useRef(null);
