@@ -18,10 +18,16 @@ const Footer = () => {
                     <div>
                         <h4 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Explore</h4>
                         <ul className="space-y-3 md:space-y-4">
-                            {['Services', 'Work', 'Agency', 'Blog', 'Careers'].map((item) => (
-                                <li key={item}>
-                                    <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center group text-sm md:text-base">
-                                        {item}
+                            {[
+                                { name: 'Services', path: '/services' },
+                                { name: 'Work', path: '/work' },
+                                { name: 'About', path: '/about' },
+                                { name: 'Blog', path: '/blog' },
+                                { name: 'Careers', path: '#' },
+                            ].map((item) => (
+                                <li key={item.name}>
+                                    <a href={item.path} className="text-gray-400 hover:text-white transition-colors flex items-center group text-sm md:text-base">
+                                        {item.name}
                                         <ArrowUpRight size={14} className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </a>
                                 </li>
