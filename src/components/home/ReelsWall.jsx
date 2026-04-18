@@ -183,7 +183,7 @@ const ReelsWall = () => {
                         Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-purple-600">Work.</span>
                     </h2>
                     <p className="text-base md:text-lg lg:text-xl text-gray-400 max-w-xl mx-auto">
-                        Explore our portfolio of AI-powered creative and development projects.
+                        Shot, edited & produced at our creative studio.
                     </p>
                 </motion.div>
             </div>
