@@ -1,9 +1,17 @@
 import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, FileText, Layers, Briefcase, Settings, LogOut, ExternalLink, MessageSquare, Film } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const AdminLayout = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const { logout } = useAuth();
+
+    const handleLogout = async () => {
+        await logout();
+        navigate('/admin/login');
+    };
 
     const navItems = [
         { icon: LayoutDashboard, label: 'Overview', path: '/admin' },
@@ -50,7 +58,7 @@ const AdminLayout = () => {
                         <ExternalLink size={18} />
                         View Website
                     </Link>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-red-900/10 hover:text-red-500 transition-all text-sm group">
+                    <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-red-900/10 hover:text-red-500 transition-all text-sm group">
                         <LogOut size={18} className="group-hover:text-red-500" />
                         Logout
                     </button>
