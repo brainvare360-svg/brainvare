@@ -54,7 +54,6 @@ const BrandingCollage = () => {
         <section ref={containerRef} className="py-16 md:py-24 lg:py-32 bg-brand-dark overflow-hidden relative min-h-[80vh] lg:min-h-[110vh] flex items-center">
             {/* Dynamic Background Mesh - Removed animate-pulse to prevent massive GPU repaint lag during scrolling */}
             <div className="absolute top-1/2 right-0 w-[600px] md:w-[900px] h-[600px] md:h-[900px] bg-brand-red/5 rounded-full blur-[120px] md:blur-[180px] pointer-events-none transform -translate-y-1/2 transform-gpu translate-z-0 will-change-transform" />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none transform-gpu translate-z-0 will-change-transform" />
 
             <div className="container mx-auto px-4 md:px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
 
@@ -94,6 +93,8 @@ const BrandingCollage = () => {
                             <img
                                 src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800"
                                 alt="Brand Lifestyle"
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
                             />
                             {/* Overlay Grid Line */}
@@ -217,7 +218,7 @@ const BrandingCollage = () => {
                 {/* Mobile Static Layout */}
                 <div className="lg:hidden mt-8 grid grid-cols-2 gap-4">
                     <div className="w-full aspect-[4/5] rounded-xl overflow-hidden border border-white/10 relative">
-                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=400" className="w-full h-full object-cover" alt="Brand" />
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=400" loading="lazy" decoding="async" className="w-full h-full object-cover" alt="Brand" />
                         <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 border-[0.5px] border-white/20 opacity-30" />
                     </div>
                     <div className="space-y-4">
