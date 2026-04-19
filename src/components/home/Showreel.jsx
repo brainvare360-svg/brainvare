@@ -29,7 +29,7 @@ const Showreel = () => {
     };
 
     return (
-        <section ref={containerRef} className="h-screen w-full relative z-20 flex items-center justify-center bg-brand-dark overflow-hidden py-0">
+        <section id="showreel" ref={containerRef} className="h-screen w-full relative z-20 flex items-center justify-center bg-brand-dark overflow-hidden py-0">
             <motion.div
                 style={{ scale }}
                 className="w-full h-full relative group shadow-2xl"

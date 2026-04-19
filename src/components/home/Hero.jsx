@@ -59,17 +59,15 @@ const Hero = () => {
                             <ArrowRight className="relative z-10 w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                         </motion.button>
 
-                        <motion.a
-                            href={window.innerWidth < 768 ? "/agency-showreel-mobile.mp4" : "/agency-showreel.mp4"}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <motion.button
+                            onClick={() => document.getElementById('showreel')?.scrollIntoView({ behavior: 'smooth' })}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 flex items-center gap-2 md:gap-3 font-medium text-white transition-colors text-sm md:text-base"
                         >
                             <Play className="w-4 h-4 fill-current" />
                             <span>Watch Reel</span>
-                        </motion.a>
+                        </motion.button>
                     </div>
                 </motion.div>
             </div>
