@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const scrollToContact = (e) => {
+        e.preventDefault();
+        if (location.pathname === '/') {
+            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            navigate('/');
+            setTimeout(() => {
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -20,22 +34,40 @@ const Navbar = () => {
         {
             name: 'Services',
             path: '/services',
-            subItems: ['Strategic Consulting', 'AI Implementation', 'Web & App Dev', 'Performance Marketing']
+            subItems: [
+                { name: 'Strategic Consulting', path: '/services' },
+                { name: 'AI Implementation', path: '/services' },
+                { name: 'Web & App Dev', path: '/services' },
+                { name: 'Performance Marketing', path: '/services' },
+            ]
         },
         {
             name: 'Work',
             path: '/work',
-            subItems: ['Selected Case Studies', 'Showreels 2024', 'Client Roster', 'Awards & Recognition']
+            subItems: [
+                { name: 'Selected Case Studies', path: '/work' },
+                { name: 'Showreels', path: '/' },
+                { name: 'Client Roster', path: '/work' },
+            ]
         },
         {
             name: 'About',
             path: '/about',
-            subItems: ['Our Story', 'Leadership Team', 'Careers', 'Press & Media']
+            subItems: [
+                { name: 'Our Story', path: '/about' },
+                { name: 'Leadership Team', path: '/about' },
+                { name: 'Careers', path: '/careers' },
+            ]
         },
         {
             name: 'Blog',
             path: '/blog',
-            subItems: ['AI Marketing Tools', 'SEO & AEO', 'Content Strategy', 'All Articles']
+            subItems: [
+                { name: 'AI Marketing Tools', path: '/blog' },
+                { name: 'SEO & AEO', path: '/blog' },
+                { name: 'Content Strategy', path: '/blog' },
+                { name: 'All Articles', path: '/blog' },
+            ]
         },
     ];
 
@@ -85,10 +117,10 @@ const Navbar = () => {
                                                 {link.subItems.map((sub, i) => (
                                                     <Link
                                                         key={i}
-                                                        to={link.path}
+                                                        to={sub.path}
                                                         className="group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 transition-colors"
                                                     >
-                                                        <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{sub}</span>
+                                                        <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{sub.name}</span>
                                                         <div className="w-1.5 h-1.5 rounded-full bg-brand-red opacity-0 group-hover:opacity-100 transition-opacity" />
                                                     </Link>
                                                 ))}
@@ -98,12 +130,12 @@ const Navbar = () => {
                                 </AnimatePresence>
                             </div>
                         ))}
-                        <a
-                            href="/#contact"
-                            className="px-6 py-2 text-sm font-medium bg-white text-black hover:bg-brand-red hover:text-white transition-all duration-300 rounded-full"
+                        <button
+                            onClick={scrollToContact}
+                            className="px-6 py-2 text-sm font-medium bg-white text-black hover:bg-brand-red hover:text-white transition-all duration-300 rounded-full cursor-pointer"
                         >
                             Let's Talk
-                        </a>
+                        </button>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -139,13 +171,12 @@ const Navbar = () => {
                                     {link.name}
                                 </Link>
                             ))}
-                            <a
-                                href="/#contact"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="mt-4 px-8 py-3 text-lg font-bold bg-white text-black rounded-full hover:bg-brand-red hover:text-white transition-all"
+                            <button
+                                onClick={(e) => { setIsMobileMenuOpen(false); scrollToContact(e); }}
+                                className="mt-4 px-8 py-3 text-lg font-bold bg-white text-black rounded-full hover:bg-brand-red hover:text-white transition-all cursor-pointer"
                             >
                                 Let's Talk
-                            </a>
+                            </button>
                         </div>
                     </motion.div>
                 )}

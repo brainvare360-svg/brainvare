@@ -2,10 +2,24 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Hero = () => {
     const { content } = useContent();
     const { hero } = content;
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const scrollToContact = () => {
+        if (location.pathname === '/') {
+            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            navigate('/');
+            setTimeout(() => {
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        }
+    };
 
     return (
         <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-dark">
@@ -51,6 +65,7 @@ const Hero = () => {
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
                         <motion.button
+                            onClick={scrollToContact}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="group relative px-6 py-3 md:px-8 md:py-4 bg-brand-red rounded-full overflow-hidden flex items-center gap-2 md:gap-3 font-bold text-white shadow-lg shadow-brand-red/25 text-sm md:text-base"
