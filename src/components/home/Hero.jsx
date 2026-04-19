@@ -12,14 +12,10 @@ const Hero = () => {
     const pathname = usePathname();
     const [showVideo, setShowVideo] = useState(false);
 
-    // Load video well after LCP measurement window
+    // Load video after initial paint is complete
     useEffect(() => {
-        const load = () => setShowVideo(true);
-        if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(load, { timeout: 3000 });
-        } else {
-            setTimeout(load, 2500);
-        }
+        const timer = setTimeout(() => setShowVideo(true), 3000);
+        return () => clearTimeout(timer);
     }, []);
 
     const scrollToContact = () => {
