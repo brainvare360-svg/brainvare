@@ -11,11 +11,17 @@ const Hero = () => {
     const router = useRouter();
     const pathname = usePathname();
     const [showVideo, setShowVideo] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
 
-    // Load video after initial paint is complete
     useEffect(() => {
-        const timer = setTimeout(() => setShowVideo(true), 3000);
-        return () => clearTimeout(timer);
+        // Only load hero video on desktop (mobile: gradient only = fast LCP)
+        const desktop = window.innerWidth >= 768;
+        setIsDesktop(desktop);
+        if (desktop) {
+            // Defer video load until after LCP is locked in
+            const timer = setTimeout(() => setShowVideo(true), 1500);
+            return () => clearTimeout(timer);
+        }
     }, []);
 
     const scrollToContact = () => {
@@ -31,9 +37,9 @@ const Hero = () => {
 
     return (
         <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-dark">
-            {/* Background Video — deferred load */}
+            {/* Background — gradient on mobile, video on desktop */}
             <div className="absolute inset-0 overflow-hidden">
-                {showVideo && (
+                {showVideo && isDesktop && (
                     <video
                         autoPlay
                         loop
@@ -45,7 +51,12 @@ const Hero = () => {
                         <source src={hero?.videoUrl || "https://cdn.pixabay.com/video/2023/04/23/160109-820542385_large.mp4"} type="video/mp4" />
                     </video>
                 )}
+                {/* Gradient overlay — always visible, acts as background on mobile */}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/50 to-transparent" />
+                {/* Subtle animated gradient for mobile (replaces video) */}
+                {!isDesktop && (
+                    <div className="absolute inset-0 bg-gradient-to-br from-brand-red/10 via-transparent to-purple-900/10 animate-[fadeIn_2s_ease-out_both]" />
+                )}
             </div>
 
             <div className="relative z-10 container mx-auto px-6 text-center">
