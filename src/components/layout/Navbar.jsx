@@ -86,7 +86,7 @@ const Navbar = () => {
             >
                 <div className="container mx-auto px-6 flex items-center justify-between">
                     <Link href="/" className="z-50 text-2xl font-bold tracking-tighter text-white flex items-center" aria-label="Brainvare — Go to homepage">
-                        <img src="/logo.png" alt="Brainvare" className="h-6 sm:h-7 md:h-8 w-auto object-contain" />
+                        <img src="/logo.png" alt="Brainvare" width={120} height={32} className="h-6 sm:h-7 md:h-8 w-auto object-contain" />
                     </Link>
 
                     {/* Desktop Menu */}

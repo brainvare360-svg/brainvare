@@ -1,7 +1,6 @@
 'use client'
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, Play } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import { useRouter, usePathname } from 'next/navigation';
@@ -11,6 +10,13 @@ const Hero = () => {
     const { hero } = content;
     const router = useRouter();
     const pathname = usePathname();
+    const [showVideo, setShowVideo] = useState(false);
+
+    // Delay video loading until after first paint
+    useEffect(() => {
+        const timer = setTimeout(() => setShowVideo(true), 100);
+        return () => clearTimeout(timer);
+    }, []);
 
     const scrollToContact = () => {
         if (pathname === '/') {
@@ -25,37 +31,32 @@ const Hero = () => {
 
     return (
         <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-dark">
-            {/* Background Video */}
+            {/* Background Video — deferred load */}
             <div className="absolute inset-0 overflow-hidden">
-                <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover opacity-60 mix-blend-overlay"
-                >
-                    <source src={hero?.videoUrl || "https://cdn.pixabay.com/video/2023/04/23/160109-820542385_large.mp4"} type="video/mp4" />
-                    {/* Fallback for browsers that don't support video */}
-                </video>
+                {showVideo && (
+                    <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="none"
+                        className="w-full h-full object-cover opacity-60 mix-blend-overlay"
+                    >
+                        <source src={hero?.videoUrl || "https://cdn.pixabay.com/video/2023/04/23/160109-820542385_large.mp4"} type="video/mp4" />
+                    </video>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/50 to-transparent" />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 transform-gpu translate-z-0 will-change-transform pointer-events-none" />
             </div>
 
             <div className="relative z-10 container mx-auto px-6 text-center">
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="max-w-4xl mx-auto"
+                <div
+                    className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_both]"
                 >
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2, duration: 0.8 }}
-                        className="inline-block mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm"
+                    <div
+                        className="inline-block mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm animate-[fadeIn_0.8s_ease-out_0.2s_both]"
                     >
                         <span className="text-sm font-medium text-gray-300">Reimagining Digital Experiences</span>
-                    </motion.div>
+                    </div>
 
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter leading-tight mb-6 md:mb-8">
                         <span className="whitespace-pre-line">{hero?.title || "We Build Digital Futures."}</span>
@@ -66,38 +67,31 @@ const Hero = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
-                        <motion.button
+                        <button
                             onClick={scrollToContact}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="group relative px-6 py-3 md:px-8 md:py-4 bg-brand-red rounded-full overflow-hidden flex items-center gap-2 md:gap-3 font-bold text-white shadow-lg shadow-brand-red/25 text-sm md:text-base"
+                            className="group relative px-6 py-3 md:px-8 md:py-4 bg-brand-red rounded-full overflow-hidden flex items-center gap-2 md:gap-3 font-bold text-white shadow-lg shadow-brand-red/25 text-sm md:text-base hover:scale-105 active:scale-95 transition-transform"
                         >
                             <span className="relative z-10">Start Project</span>
                             <ArrowRight className="relative z-10 w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
-                        </motion.button>
+                        </button>
 
-                        <motion.button
+                        <button
                             onClick={() => document.getElementById('showreel')?.scrollIntoView({ behavior: 'smooth' })}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 flex items-center gap-2 md:gap-3 font-medium text-white transition-colors text-sm md:text-base"
+                            className="px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 flex items-center gap-2 md:gap-3 font-medium text-white transition-all text-sm md:text-base hover:scale-105 active:scale-95"
                         >
                             <Play className="w-4 h-4 fill-current" />
                             <span>Watch Reel</span>
-                        </motion.button>
+                        </button>
                     </div>
-                </motion.div>
+                </div>
             </div>
 
             {/* Scroll Indicator */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1, duration: 1 }}
-                className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2"
+            <div
+                className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 animate-[fadeIn_1s_ease-out_1s_both]"
             >
                 <div className="w-[1px] h-12 md:h-20 bg-gradient-to-b from-white/0 via-white/50 to-white/0" />
-            </motion.div>
+            </div>
         </section>
     );
 };

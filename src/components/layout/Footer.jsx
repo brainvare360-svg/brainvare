@@ -11,7 +11,7 @@ const Footer = () => {
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-12 mb-10 md:mb-12 lg:mb-16">
                     <div className="col-span-2 md:col-span-1 space-y-4 md:space-y-6">
                         <div className="mb-2">
-                            <img src="/logo.png" alt="Brainvare" className="h-7 md:h-8 w-auto object-contain" />
+                            <img loading="lazy" src="/logo.png" alt="Brainvare" width={120} height={32} className="h-7 md:h-8 w-auto object-contain" />
                         </div>
                         <p className="text-gray-400 max-w-xs text-sm md:text-base">
                             AI-First Creative, Production & Performance Studio. Building digital experiences that matter.
