@@ -9,6 +9,7 @@ import { ContentProvider } from './context/ContentContext'
 import { EnquiriesProvider } from './context/EnquiriesContext'
 import { PagesProvider } from './context/PagesContext'
 import { ReelsProvider } from './context/ReelsContext'
+import { CareersProvider } from './context/CareersContext'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -18,9 +19,11 @@ createRoot(document.getElementById('root')).render(
           <EnquiriesProvider>
             <PagesProvider>
               <ReelsProvider>
-                <BrowserRouter>
-                  <App />
-                </BrowserRouter>
+                <CareersProvider>
+                  <BrowserRouter>
+                    <App />
+                  </BrowserRouter>
+                </CareersProvider>
               </ReelsProvider>
             </PagesProvider>
           </EnquiriesProvider>

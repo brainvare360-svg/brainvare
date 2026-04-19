@@ -10,6 +10,7 @@ import ContentManager from './pages/admin/ContentManager';
 import EnquiriesManager from './pages/admin/EnquiriesManager';
 import PagesManager from './pages/admin/PagesManager';
 import ReelsManager from './pages/admin/ReelsManager';
+import CareersManager from './pages/admin/CareersManager';
 import Login from './pages/admin/Login';
 import Lenis from 'lenis';
 
@@ -19,6 +20,7 @@ import Work from './pages/Work';
 import Agency from './pages/Agency';
 import BlogList from './pages/BlogList';
 import BlogPost from './pages/BlogPost';
+import Careers from './pages/Careers';
 
 function App() {
   const location = useLocation();
@@ -64,6 +66,7 @@ function App() {
           <Route path="/about" element={<Agency />} />
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/careers" element={<Careers />} />
         </Route>
 
         {/* Admin Login — outside protection */}
@@ -79,6 +82,7 @@ function App() {
           <Route path="enquiries" element={<EnquiriesManager />} />
           <Route path="pages" element={<PagesManager />} />
           <Route path="reels" element={<ReelsManager />} />
+          <Route path="careers" element={<CareersManager />} />
           <Route path="content" element={<ContentManager />} />
           <Route path="*" element={<DashboardHome />} />
         </Route>

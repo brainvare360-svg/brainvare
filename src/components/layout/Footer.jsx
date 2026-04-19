@@ -23,7 +23,7 @@ const Footer = () => {
                                 { name: 'Work', path: '/work' },
                                 { name: 'About', path: '/about' },
                                 { name: 'Blog', path: '/blog' },
-                                { name: 'Careers', path: '#' },
+                                { name: 'Careers', path: '/careers' },
                             ].map((item) => (
                                 <li key={item.name}>
                                     <a href={item.path} className="text-gray-400 hover:text-white transition-colors flex items-center group text-sm md:text-base">

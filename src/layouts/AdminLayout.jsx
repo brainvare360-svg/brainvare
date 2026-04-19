@@ -18,6 +18,7 @@ const AdminLayout = () => {
         { icon: MessageSquare, label: 'Enquiries', path: '/admin/enquiries' },
         { icon: FileText, label: 'Pages', path: '/admin/pages' },
         { icon: Film, label: 'Reels', path: '/admin/reels' },
+        { icon: Briefcase, label: 'Careers', path: '/admin/careers' },
         { icon: Layers, label: 'Content', path: '/admin/content' },
         { icon: Briefcase, label: 'Work', path: '/admin/work' },
         { icon: Settings, label: 'Settings', path: '/admin/settings' },
