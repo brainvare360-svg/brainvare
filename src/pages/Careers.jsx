@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, ArrowRight, Briefcase, X, CheckCircle, Loader2, Upload, Link as LinkIcon } from 'lucide-react';
 import { useCareers } from '../context/CareersContext';
@@ -13,6 +13,12 @@ const ApplicationForm = ({ job, onClose }) => {
         coverLetter: '', resumeLink: '', availability: 'Immediately',
         expectedSalary: '', howDidYouHear: ''
     });
+
+    // Lock body scroll when modal is open
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => { document.body.style.overflow = ''; };
+    }, []);
 
     const handleChange = (e) => {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -39,6 +45,7 @@ const ApplicationForm = ({ job, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-xl flex items-start justify-center overflow-y-auto p-4 md:p-8"
+            data-lenis-prevent
             onClick={onClose}
         >
             <motion.div
