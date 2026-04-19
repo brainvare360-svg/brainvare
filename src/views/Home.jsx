@@ -1,23 +1,9 @@
 'use client'
 
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import SEOHead from '../components/SEOHead';
 import Hero from '../components/home/Hero';
-
-// Lazy load below-the-fold sections — only loads when needed
-const Showreel = lazy(() => import('../components/home/Showreel'));
-const Services = lazy(() => import('../components/home/Services'));
-const ReelsWall = lazy(() => import('../components/home/ReelsWall'));
-const BrandingCollage = lazy(() => import('../components/home/BrandingCollage'));
-const SeoPerformance = lazy(() => import('../components/home/SeoPerformance'));
-const About = lazy(() => import('../components/home/About'));
-const Reviews = lazy(() => import('../components/home/Reviews'));
-const Contact = lazy(() => import('../components/home/Contact'));
-
-// Minimal fallback — invisible placeholder matching section height
-const SectionFallback = () => (
-    <div className="min-h-[50vh]" />
-);
+import LazySection from '../components/LazySection';
 
 const Home = () => {
     return (
@@ -77,31 +63,15 @@ const Home = () => {
             {/* Hero loads immediately — above the fold */}
             <Hero />
 
-            {/* Everything below lazy-loads as user scrolls */}
-            <Suspense fallback={<SectionFallback />}>
-                <Showreel />
-            </Suspense>
-            <Suspense fallback={<SectionFallback />}>
-                <Services />
-            </Suspense>
-            <Suspense fallback={<SectionFallback />}>
-                <ReelsWall />
-            </Suspense>
-            <Suspense fallback={<SectionFallback />}>
-                <BrandingCollage />
-            </Suspense>
-            <Suspense fallback={<SectionFallback />}>
-                <SeoPerformance />
-            </Suspense>
-            <Suspense fallback={<SectionFallback />}>
-                <About />
-            </Suspense>
-            <Suspense fallback={<SectionFallback />}>
-                <Reviews />
-            </Suspense>
-            <Suspense fallback={<SectionFallback />}>
-                <Contact />
-            </Suspense>
+            {/* Sections load ONLY when user scrolls near them — saves ~300KB JS on initial load */}
+            <LazySection importFn={() => import('../components/home/Showreel')} rootMargin="100px" />
+            <LazySection importFn={() => import('../components/home/Services')} rootMargin="300px" />
+            <LazySection importFn={() => import('../components/home/ReelsWall')} rootMargin="300px" />
+            <LazySection importFn={() => import('../components/home/BrandingCollage')} rootMargin="300px" />
+            <LazySection importFn={() => import('../components/home/SeoPerformance')} rootMargin="300px" />
+            <LazySection importFn={() => import('../components/home/About')} rootMargin="300px" />
+            <LazySection importFn={() => import('../components/home/Reviews')} rootMargin="300px" />
+            <LazySection importFn={() => import('../components/home/Contact')} rootMargin="300px" />
         </main>
     );
 };
