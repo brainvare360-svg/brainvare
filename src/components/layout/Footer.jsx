@@ -19,7 +19,7 @@ const Footer = () => {
                     </div>
 
                     <div>
-                        <h4 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Explore</h4>
+                        <p className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Explore</p>
                         <ul className="space-y-3 md:space-y-4">
                             {[
                                 { name: 'Services', path: '/services' },
@@ -39,7 +39,7 @@ const Footer = () => {
                     </div>
 
                     <div>
-                        <h4 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Contact</h4>
+                        <p className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Contact</p>
                         <div className="space-y-3 md:space-y-4 text-gray-400 text-sm md:text-base">
                             <p><a href="mailto:care@brainvare.com" className="hover:text-white transition-colors">care@brainvare.com</a></p>
                             <p><a href="tel:+918075098869" className="hover:text-white transition-colors">+91 80750 98869</a></p>
@@ -48,7 +48,7 @@ const Footer = () => {
                     </div>
 
                     <div>
-                        <h4 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Socials</h4>
+                        <p className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Socials</p>
                         <div className="flex space-x-3 md:space-x-4">
                             <a href="https://www.linkedin.com/company/brainvare" target="_blank" rel="noopener noreferrer" aria-label="Brainvare on LinkedIn" className="p-2.5 md:p-3 bg-white/5 rounded-full hover:bg-brand-red hover:text-white transition-all">
                                 <Linkedin size={18} className="md:hidden" />

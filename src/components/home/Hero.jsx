@@ -66,14 +66,14 @@ const Hero = () => {
                     <div
                         className="inline-block mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm animate-[fadeIn_0.8s_ease-out_0.2s_both]"
                     >
-                        <span className="text-sm font-medium text-gray-300">Reimagining Digital Experiences</span>
+                        <span className="text-sm font-medium text-gray-200">Reimagining Digital Experiences</span>
                     </div>
 
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter leading-tight mb-6 md:mb-8">
                         <span className="whitespace-pre-line">{hero?.title || "We Build Digital Futures."}</span>
                     </h1>
 
-                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed px-2 md:px-0">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed px-2 md:px-0">
                         {hero?.subtitle || "Brainvare is an AI-first creative studio integrating data, design, and technology to scale your brand."}
                     </p>
 

@@ -84,7 +84,7 @@ const Contact = () => {
                                     <Mail size={24} className="hidden md:block" />
                                 </div>
                                 <div>
-                                    <h4 className="text-base md:text-lg font-bold text-white">Email Us</h4>
+                                    <p className="text-base md:text-lg font-bold text-white">Email Us</p>
                                     <p className="text-gray-400 text-sm md:text-base">care@brainvare.com</p>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@ const Contact = () => {
                                     <Phone size={24} className="hidden md:block" />
                                 </div>
                                 <div>
-                                    <h4 className="text-base md:text-lg font-bold text-white">Call Us</h4>
+                                    <p className="text-base md:text-lg font-bold text-white">Call Us</p>
                                     <p className="text-gray-400 text-sm md:text-base">+91 80750 98869</p>
                                 </div>
                             </div>
@@ -104,7 +104,7 @@ const Contact = () => {
                                     <MapPin size={24} className="hidden md:block" />
                                 </div>
                                 <div>
-                                    <h4 className="text-base md:text-lg font-bold text-white">Visit Us</h4>
+                                    <p className="text-base md:text-lg font-bold text-white">Visit Us</p>
                                     <p className="text-gray-400 text-sm md:text-base">Infopark, Kochi, Kerala, India</p>
                                 </div>
                             </div>

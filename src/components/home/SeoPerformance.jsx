@@ -80,7 +80,7 @@ const SeoPerformance = () => {
                                 <Search className="text-blue-400 w-6 h-6 md:w-8 md:h-8 p-1 md:p-1.5 bg-blue-500/10 rounded-lg group-hover:bg-blue-500/20 transition-colors" />
                                 <TrendingUp className="text-green-400 w-4 h-4 md:w-5 md:h-5 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0" />
                             </div>
-                            <h4 className="text-[10px] md:text-xs font-mono text-blue-400 mb-1 md:mb-2 tracking-widest">FOUNDATION</h4>
+                            <p className="text-[10px] md:text-xs font-mono text-blue-400 mb-1 md:mb-2 tracking-widest">FOUNDATION</p>
                             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2">Technical SEO</h3>
                             <p className="text-gray-400 text-xs md:text-sm leading-relaxed">Precision engineering for Google's ever-evolving algorithms.</p>
                         </div>
@@ -125,7 +125,7 @@ const SeoPerformance = () => {
 
                         <div className="h-[40%] px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8 flex flex-col justify-end relative z-10 bg-gradient-to-t from-black/80 to-transparent">
                             <Zap className="text-purple-400 w-6 h-6 md:w-8 md:h-8 mb-2 md:mb-4 p-1 md:p-1.5 bg-purple-500/10 rounded-lg group-hover:bg-purple-500/20 transition-colors" />
-                            <h4 className="text-[10px] md:text-xs font-mono text-purple-400 mb-1 md:mb-2 tracking-widest">NEW ERA</h4>
+                            <p className="text-[10px] md:text-xs font-mono text-purple-400 mb-1 md:mb-2 tracking-widest">NEW ERA</p>
                             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2">AEO & AI Search</h3>
                             <p className="text-gray-400 text-xs md:text-sm leading-relaxed">Optimization for Perplexity, ChatGPT, and the Gemini era.</p>
                         </div>
@@ -174,7 +174,7 @@ const SeoPerformance = () => {
 
                         <div className="h-[40%] px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8 flex flex-col justify-end relative z-10 bg-gradient-to-t from-black/80 to-transparent">
                             <Network className="text-green-400 w-6 h-6 md:w-8 md:h-8 mb-2 md:mb-4 p-1 md:p-1.5 bg-green-500/10 rounded-lg group-hover:bg-green-500/20 transition-colors" />
-                            <h4 className="text-[10px] md:text-xs font-mono text-green-400 mb-1 md:mb-2 tracking-widest">AUTOMATION</h4>
+                            <p className="text-[10px] md:text-xs font-mono text-green-400 mb-1 md:mb-2 tracking-widest">AUTOMATION</p>
                             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2">AI Agents</h3>
                             <p className="text-gray-400 text-xs md:text-sm leading-relaxed">Intelligent bots that capture leads and automate support 24/7.</p>
                         </div>
@@ -210,7 +210,7 @@ const SeoPerformance = () => {
 
                         <div className="h-[40%] px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8 flex flex-col justify-end relative z-10 bg-gradient-to-t from-black/80 to-transparent">
                             <Share2 className="text-orange-400 w-6 h-6 md:w-8 md:h-8 mb-2 md:mb-4 p-1 md:p-1.5 bg-orange-500/10 rounded-lg group-hover:bg-orange-500/20 transition-colors" />
-                            <h4 className="text-[10px] md:text-xs font-mono text-orange-400 mb-1 md:mb-2 tracking-widest">ECOSYSTEM</h4>
+                            <p className="text-[10px] md:text-xs font-mono text-orange-400 mb-1 md:mb-2 tracking-widest">ECOSYSTEM</p>
                             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2">Omni-Channel</h3>
                             <p className="text-gray-400 text-xs md:text-sm leading-relaxed">Unified brand presence across Search, Social, and Voice.</p>
                         </div>
