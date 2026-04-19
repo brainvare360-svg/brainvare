@@ -9,8 +9,8 @@ const Home = () => {
     return (
         <main>
             <SEOHead
-                title="Brainvare | AI-First Creative Studio — Strategy, Design & Technology"
-                description="Brainvare is an AI-first creative studio in Kochi, Kerala. We integrate data, design, and technology to build digital futures — from AI implementation to performance marketing."
+                title="Brainvare | AI-First Creative & Production Studio"
+                description="AI-first creative studio in Kochi, Kerala. We blend AI, design & technology to scale brands — web development, SEO & performance marketing."
                 canonical="https://www.brainvare.com/"
                 keywords="AI creative studio, AI-first agency Kerala, digital marketing agency Kochi, web development company India, AI implementation, brand strategy, performance marketing, SEO AEO agency"
                 isHomePage={true}
@@ -64,14 +64,39 @@ const Home = () => {
             <Hero />
 
             {/* Sections load ONLY when user scrolls near them — saves ~300KB JS on initial load */}
-            <LazySection importFn={() => import('../components/home/Showreel')} rootMargin="100px" />
-            <LazySection importFn={() => import('../components/home/Services')} rootMargin="300px" />
-            <LazySection importFn={() => import('../components/home/ReelsWall')} rootMargin="300px" />
-            <LazySection importFn={() => import('../components/home/BrandingCollage')} rootMargin="300px" />
-            <LazySection importFn={() => import('../components/home/SeoPerformance')} rootMargin="300px" />
-            <LazySection importFn={() => import('../components/home/About')} rootMargin="300px" />
-            <LazySection importFn={() => import('../components/home/Reviews')} rootMargin="300px" />
-            <LazySection importFn={() => import('../components/home/Contact')} rootMargin="300px" />
+            {/* H2 section headings in static HTML for SEO crawlers */}
+            <section aria-labelledby="showreel-heading">
+                <h2 id="showreel-heading" className="sr-only">Showreel</h2>
+                <LazySection importFn={() => import('../components/home/Showreel')} rootMargin="100px" />
+            </section>
+            <section aria-labelledby="services-heading">
+                <h2 id="services-heading" className="sr-only">Our Services</h2>
+                <LazySection importFn={() => import('../components/home/Services')} rootMargin="300px" />
+            </section>
+            <section aria-labelledby="reels-heading">
+                <h2 id="reels-heading" className="sr-only">Creative Reels & Video Production</h2>
+                <LazySection importFn={() => import('../components/home/ReelsWall')} rootMargin="300px" />
+            </section>
+            <section aria-labelledby="branding-heading">
+                <h2 id="branding-heading" className="sr-only">Branding & Design Portfolio</h2>
+                <LazySection importFn={() => import('../components/home/BrandingCollage')} rootMargin="300px" />
+            </section>
+            <section aria-labelledby="seo-heading">
+                <h2 id="seo-heading" className="sr-only">SEO & Digital Performance</h2>
+                <LazySection importFn={() => import('../components/home/SeoPerformance')} rootMargin="300px" />
+            </section>
+            <section aria-labelledby="about-heading">
+                <h2 id="about-heading" className="sr-only">About Brainvare</h2>
+                <LazySection importFn={() => import('../components/home/About')} rootMargin="300px" />
+            </section>
+            <section aria-labelledby="reviews-heading">
+                <h2 id="reviews-heading" className="sr-only">Client Reviews & Testimonials</h2>
+                <LazySection importFn={() => import('../components/home/Reviews')} rootMargin="300px" />
+            </section>
+            <section aria-labelledby="contact-heading">
+                <h2 id="contact-heading" className="sr-only">Contact Us</h2>
+                <LazySection importFn={() => import('../components/home/Contact')} rootMargin="300px" />
+            </section>
         </main>
     );
 };
