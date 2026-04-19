@@ -2,12 +2,17 @@
 
 import React from 'react';
 
+/**
+ * SEOHead — renders structured data (JSON-LD) only.
+ * Basic meta tags (title, description, OG, Twitter) are handled by
+ * Next.js metadata API in layout.jsx / page.jsx files.
+ */
 const SEOHead = ({
-    title = 'Brainvare | AI-First Creative Studio',
-    description = 'Brainvare is an AI-first creative studio integrating data, design, and technology to scale your brand.',
-    canonical = 'https://www.brainvare.com/',
-    ogImage = 'https://www.brainvare.com/logo.png',
-    ogType = 'website',
+    title,
+    description,
+    canonical,
+    ogImage,
+    ogType,
     article = null,
     breadcrumbs = null,
     faq = null,
@@ -144,72 +149,22 @@ const SEOHead = ({
 
     return (
         <>
-            {/* Primary Meta */}
-            <title>{title}</title>
-            <meta name="description" content={description} />
-            <link rel="canonical" href={canonical} />
-            <meta name="author" content="Brainvare" />
-
-            {/* Robots */}
-            {noindex
-                ? <meta name="robots" content="noindex, nofollow" />
-                : <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-            }
-
-            {/* Keywords */}
-            {keywords && <meta name="keywords" content={keywords} />}
-
-            {/* Open Graph */}
-            <meta property="og:type" content={ogType} />
-            <meta property="og:url" content={canonical} />
-            <meta property="og:title" content={title} />
-            <meta property="og:description" content={description} />
-            <meta property="og:image" content={ogImage} />
-            <meta property="og:site_name" content="Brainvare" />
-            <meta property="og:locale" content={locale} />
-            <meta property="og:image:width" content="1200" />
-            <meta property="og:image:height" content="630" />
-
-            {/* Twitter Card */}
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:site" content="@brainvare" />
-            <meta name="twitter:title" content={title} />
-            <meta name="twitter:description" content={description} />
-            <meta name="twitter:image" content={ogImage} />
-
-            {/* Article specific */}
-            {article && <meta property="article:published_time" content={article.datePublished} />}
-            {article && <meta property="article:author" content={article.author} />}
-            {article && <meta property="article:section" content={article.category} />}
-
-            {/* JSON-LD Structured Data */}
-            <script type="application/ld+json">
-                {JSON.stringify(organizationSchema)}
-            </script>
+            {/* JSON-LD Structured Data only — meta tags handled by Next.js metadata API */}
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
             {websiteSchema && (
-                <script type="application/ld+json">
-                    {JSON.stringify(websiteSchema)}
-                </script>
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
             )}
             {articleSchema && (
-                <script type="application/ld+json">
-                    {JSON.stringify(articleSchema)}
-                </script>
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
             )}
             {breadcrumbSchema && (
-                <script type="application/ld+json">
-                    {JSON.stringify(breadcrumbSchema)}
-                </script>
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
             )}
             {faqSchema && (
-                <script type="application/ld+json">
-                    {JSON.stringify(faqSchema)}
-                </script>
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
             )}
             {customSchema && (
-                <script type="application/ld+json">
-                    {JSON.stringify(customSchema)}
-                </script>
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(customSchema) }} />
             )}
         </>
     );
