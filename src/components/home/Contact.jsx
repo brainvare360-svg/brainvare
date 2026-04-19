@@ -84,7 +84,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-base md:text-lg font-bold text-white">Email Us</h4>
-                                    <p className="text-gray-400 text-sm md:text-base">hello@brainvare.com</p>
+                                    <p className="text-gray-400 text-sm md:text-base">care@brainvare.com</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3 md:gap-4">
@@ -94,7 +94,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-base md:text-lg font-bold text-white">Call Us</h4>
-                                    <p className="text-gray-400 text-sm md:text-base">+91 987 654 3210</p>
+                                    <p className="text-gray-400 text-sm md:text-base">+91 80750 98869</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3 md:gap-4">
