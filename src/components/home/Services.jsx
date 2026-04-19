@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import * as Icons from 'lucide-react';
 import { ArrowUpRight } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
+import { Link } from 'react-router-dom';
 
 const getIcon = (iconName) => {
     // If it's already a React element (e.g. default data before save), return it
@@ -156,9 +157,9 @@ const Services = () => {
                 </div>
 
                 <div className="mt-12 text-center md:hidden">
-                    <button className="px-8 py-4 border border-white/10 rounded-full hover:bg-white hover:text-black transition-all duration-300 font-medium">
+                    <Link to="/services" className="px-8 py-4 border border-white/10 rounded-full hover:bg-white hover:text-black transition-all duration-300 font-medium inline-block text-center">
                         View All Services
-                    </button>
+                    </Link>
                 </div>
             </div>
         </section>

@@ -47,6 +47,7 @@ const Showreel = () => {
                 <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 z-10">
                     <button
                         onClick={toggleMute}
+                        aria-label={isMuted ? "Unmute video" : "Mute video"}
                         className="p-2 md:p-3 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-white hover:text-black transition-colors"
                     >
                         {isMuted ? <VolumeX size={16} className="md:hidden" /> : <Volume2 size={16} className="md:hidden" />}

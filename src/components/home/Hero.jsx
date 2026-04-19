@@ -59,7 +59,7 @@ const Hero = () => {
                         <span className="whitespace-pre-line">{hero?.title || "We Build Digital Futures."}</span>
                     </h1>
 
-                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed px-2 md:px-0">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed px-2 md:px-0">
                         {hero?.subtitle || "Brainvare is an AI-first creative studio integrating data, design, and technology to scale your brand."}
                     </p>
 

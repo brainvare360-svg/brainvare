@@ -57,8 +57,8 @@ const ReelCard = ({ item, onClick }) => {
             {/* Link Icon Overlay */}
             <button
                 onClick={handleInstagramClick}
+                aria-label="View on Instagram"
                 className="absolute top-3 right-3 z-20 p-2 rounded-full bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-110 shadow-lg"
-                title="View on Instagram"
             >
                 <Instagram size={16} />
             </button>
@@ -99,6 +99,7 @@ const FullScreenPlayer = ({ video, onClose }) => {
 
                 <button
                     onClick={onClose}
+                    aria-label="Close video player"
                     className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full bg-black/40 hover:bg-white/20 text-white backdrop-blur-md transition-colors z-50"
                 >
                     <X size={20} className="md:hidden" />
@@ -107,6 +108,7 @@ const FullScreenPlayer = ({ video, onClose }) => {
 
                 <button
                     onClick={() => setIsMuted(!isMuted)}
+                    aria-label={isMuted ? "Unmute video" : "Mute video"}
                     className="absolute bottom-20 md:bottom-24 right-4 md:right-6 p-2 md:p-3 rounded-full bg-black/40 hover:bg-white/20 text-white backdrop-blur-md transition-colors z-50"
                 >
                     {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}

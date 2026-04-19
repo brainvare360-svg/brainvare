@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Search, ToggleRight, PenTool, Layout, Type, Palette, MousePointer2, Grid, Layers, X as XIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const BrandingCollage = () => {
     const containerRef = useRef(null);
@@ -75,9 +76,9 @@ const BrandingCollage = () => {
                     <p className="text-base md:text-lg lg:text-xl text-gray-400 mb-6 md:mb-8 lg:mb-10 max-w-md leading-relaxed">
                         A living identity. Kinetic typography, vibrating color theory, and responsive component architecture.
                     </p>
-                    <button className="px-6 py-3 md:px-8 md:py-4 border border-white/20 bg-white/5 backdrop-blur-md text-white font-bold rounded-full hover:bg-white hover:text-black transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] text-sm md:text-base">
+                    <Link to="/about" className="px-6 py-3 md:px-8 md:py-4 border border-white/20 bg-white/5 backdrop-blur-md text-white font-bold rounded-full hover:bg-white hover:text-black transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] text-sm md:text-base inline-block">
                         Explore Guidelines
-                    </button>
+                    </Link>
                 </motion.div>
 
                 {/* Parallax Collage Area - HIGH ENERGY */}
@@ -94,6 +95,9 @@ const BrandingCollage = () => {
                             <img
                                 src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800"
                                 alt="Brand Lifestyle"
+                                width={800}
+                                height={1000}
+                                loading="lazy"
                                 className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
                             />
                             {/* Overlay Grid Line */}
@@ -217,7 +221,7 @@ const BrandingCollage = () => {
                 {/* Mobile Static Layout */}
                 <div className="lg:hidden mt-8 grid grid-cols-2 gap-4">
                     <div className="w-full aspect-[4/5] rounded-xl overflow-hidden border border-white/10 relative">
-                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=400" className="w-full h-full object-cover" alt="Brand" />
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=400" className="w-full h-full object-cover" alt="Brand identity" width={400} height={500} loading="lazy" />
                         <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 border-[0.5px] border-white/20 opacity-30" />
                     </div>
                     <div className="space-y-4">
