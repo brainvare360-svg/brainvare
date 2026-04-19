@@ -28,7 +28,7 @@ const Showreel = () => {
                     observer.disconnect();
                 }
             },
-            { rootMargin: '200px' } // Start loading 200px before visible
+            { rootMargin: '0px', threshold: 0.1 } // Only load when user scrolls here
         );
         observer.observe(containerRef.current);
         return () => observer.disconnect();
