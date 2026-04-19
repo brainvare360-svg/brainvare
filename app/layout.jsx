@@ -1,4 +1,12 @@
+import { Inter } from 'next/font/google'
 import '../src/index.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-inter',
+})
 
 export const metadata = {
   title: {
@@ -46,22 +54,11 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <head>
-        {/* DNS Prefetch & Preconnect */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://cdn.pixabay.com" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        {/* DNS Prefetch & Preconnect for API/CDN */}
         <link rel="preconnect" href="https://brainvare-api.brainvare.workers.dev" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pub-7d4c3d28f22346aabe910818aa5a7001.r2.dev" />
-
-        {/* Google Fonts — async non-render-blocking */}
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onLoad="this.media='all'" />
-        <noscript>
-          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-        </noscript>
 
         {/* Structured Data */}
         <script
@@ -90,7 +87,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="min-h-screen bg-brand-dark text-white selection:bg-brand-red selection:text-white">
+      <body className={`${inter.className} min-h-screen bg-brand-dark text-white selection:bg-brand-red selection:text-white`}>
         {children}
       </body>
     </html>

@@ -9,12 +9,29 @@ const Showreel = () => {
     const videoRef = useRef(null);
     const [isMuted, setIsMuted] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
-        handleResize(); // Set initial value
+        handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Lazy load video — only start loading when section is near viewport
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: '200px' } // Start loading 200px before visible
+        );
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
     }, []);
 
     const { scrollYProgress } = useScroll({
@@ -37,15 +54,20 @@ const Showreel = () => {
                 style={{ scale }}
                 className="w-full h-full relative group shadow-2xl"
             >
-                <video
-                    ref={videoRef}
-                    src={isMobile ? "/agency-showreel-mobile.mp4" : "/agency-showreel.mp4"}
-                    className="w-full h-full object-cover"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                />
+                {isVisible ? (
+                    <video
+                        ref={videoRef}
+                        src={isMobile ? "/agency-showreel-mobile.mp4" : "/agency-showreel.mp4"}
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="auto"
+                    />
+                ) : (
+                    <div className="w-full h-full bg-brand-dark" />
+                )}
 
                 <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 z-10">
                     <button

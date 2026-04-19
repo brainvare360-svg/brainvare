@@ -115,7 +115,7 @@ const BlogPost = () => {
 
                         <div className="flex flex-wrap items-center gap-6 pb-8 border-b border-white/10">
                             <div className="flex items-center gap-3">
-                                <img src={post.authorImage} alt={post.author} className="w-12 h-12 rounded-full object-cover ring-2 ring-brand-red/20" />
+                                <img loading="lazy" src={post.authorImage} alt={post.author} className="w-12 h-12 rounded-full object-cover ring-2 ring-brand-red/20" />
                                 <div>
                                     <p className="text-white font-medium">{post.author}</p>
                                     <p className="text-gray-500 text-sm">{post.authorRole}</p>
@@ -216,7 +216,7 @@ const BlogPost = () => {
                         {/* Author Box */}
                         <div className="mt-16 p-8 bg-white/[0.03] border border-white/10 rounded-2xl">
                             <div className="flex items-start gap-5">
-                                <img src={post.authorImage} alt={post.author} className="w-16 h-16 rounded-full object-cover ring-2 ring-brand-red/20 shrink-0" />
+                                <img loading="lazy" src={post.authorImage} alt={post.author} className="w-16 h-16 rounded-full object-cover ring-2 ring-brand-red/20 shrink-0" />
                                 <div>
                                     <h4 className="text-lg font-bold text-white mb-1">{post.author}</h4>
                                     <p className="text-brand-red text-sm mb-3">{post.authorRole}</p>

@@ -127,7 +127,7 @@ const BlogList = () => {
                                 </p>
                                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                                     <span className="flex items-center gap-2">
-                                        <img src={featuredPost.authorImage} alt={featuredPost.author} className="w-8 h-8 rounded-full object-cover" />
+                                        <img loading="lazy" src={featuredPost.authorImage} alt={featuredPost.author} className="w-8 h-8 rounded-full object-cover" />
                                         {featuredPost.author}
                                     </span>
                                     <span>•</span>
@@ -173,7 +173,7 @@ const BlogList = () => {
                                                 {post.metaDescription}
                                             </p>
                                             <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                                                <img src={post.authorImage} alt={post.author} className="w-8 h-8 rounded-full object-cover" />
+                                                <img loading="lazy" src={post.authorImage} alt={post.author} className="w-8 h-8 rounded-full object-cover" />
                                                 <div>
                                                     <p className="text-white text-sm font-medium">{post.author}</p>
                                                     <p className="text-gray-600 text-xs">{post.publishDate}</p>

@@ -158,7 +158,7 @@ const BrandingCollage = () => {
                                 <div className="absolute top-2 left-2 w-[160px] h-[100px] bg-white/20 border border-white/10 rounded-xl backdrop-blur-sm transform rotate-3" />
                                 {/* Card 3 (Front - Main) */}
                                 <div className="relative w-[160px] h-[100px] bg-[#1a1a1a] border border-white/20 rounded-xl flex items-center justify-center shadow-2xl overflow-hidden hover:scale-105 transition-transform">
-                                    <img src="/logo.png" alt="Brainvare Logo Variant" className="opacity-80 invert w-3/4 object-contain" />
+                                    <img loading="lazy" src="/logo.png" alt="Brainvare Logo Variant" className="opacity-80 invert w-3/4 object-contain" />
                                 </div>
                             </div>
                         </motion.div>
@@ -223,7 +223,7 @@ const BrandingCollage = () => {
                 {/* Mobile Static Layout */}
                 <div className="lg:hidden mt-8 grid grid-cols-2 gap-4">
                     <div className="w-full aspect-[4/5] rounded-xl overflow-hidden border border-white/10 relative">
-                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=400" className="w-full h-full object-cover" alt="Brand identity" width={400} height={500} loading="lazy" />
+                        <img loading="lazy" src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=400" className="w-full h-full object-cover" alt="Brand identity" width={400} height={500} loading="lazy" />
                         <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 border-[0.5px] border-white/20 opacity-30" />
                     </div>
                     <div className="space-y-4">
