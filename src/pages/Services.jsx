@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Code, Globe, Rocket, ArrowRight } from 'lucide-react';
+import SEOHead from '../components/SEOHead';
 
 const Services = () => {
     const categories = [
@@ -31,7 +32,34 @@ const Services = () => {
     ];
 
     return (
-        <section className="min-h-screen bg-black text-white pt-32 pb-24">
+        <>
+            <SEOHead
+                title="AI-Powered Services | Strategy, Development & Marketing — Brainvare"
+                description="Explore Brainvare's full-stack AI services: strategic consulting, custom LLM integration, RAG systems, Next.js development, React Native apps, SEO, AEO, and performance marketing."
+                canonical="https://www.brainvare.com/services"
+                keywords="AI consulting services, LLM integration, RAG systems development, Next.js development agency, React Native app development, SEO services Kerala, AEO optimization, digital transformation consulting"
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://www.brainvare.com/' },
+                    { name: 'Services', url: 'https://www.brainvare.com/services' }
+                ]}
+                customSchema={{
+                    "@context": "https://schema.org",
+                    "@type": "CollectionPage",
+                    "name": "Brainvare Services",
+                    "description": "End-to-end AI-powered services for digital transformation",
+                    "url": "https://www.brainvare.com/services",
+                    "mainEntity": {
+                        "@type": "ItemList",
+                        "itemListElement": [
+                            { "@type": "ListItem", "position": 1, "name": "Strategic Consulting", "description": "AI readiness assessment, digital transformation strategy, tech stack optimization, data architecture" },
+                            { "@type": "ListItem", "position": 2, "name": "AI Implementation", "description": "Custom LLM integration, RAG systems, automated workflows, intelligent agents" },
+                            { "@type": "ListItem", "position": 3, "name": "Web & App Development", "description": "Next.js applications, React Native mobile apps, WebGL experiences, enterprise platforms" },
+                            { "@type": "ListItem", "position": 4, "name": "Performance Marketing", "description": "SEO & AEO, programmatic ad buying, conversion rate optimization, analytics & reporting" }
+                        ]
+                    }
+                }}
+            />
+            <section className="min-h-screen bg-black text-white pt-32 pb-24">
             <div className="container mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -78,6 +106,7 @@ const Services = () => {
                 </div>
             </div>
         </section>
+        </>
     );
 };
 

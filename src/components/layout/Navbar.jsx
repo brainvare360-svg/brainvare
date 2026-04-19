@@ -47,9 +47,10 @@ const Navbar = () => {
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-4 bg-brand-dark/80 backdrop-blur-md border-b border-white/10' : 'py-6 bg-transparent'
                     }`}
+                aria-label="Main navigation"
             >
                 <div className="container mx-auto px-6 flex items-center justify-between">
-                    <Link to="/" className="z-50 text-2xl font-bold tracking-tighter text-white flex items-center">
+                    <Link to="/" className="z-50 text-2xl font-bold tracking-tighter text-white flex items-center" aria-label="Brainvare — Go to homepage">
                         <img src="/logo.png" alt="Brainvare" className="h-6 sm:h-7 md:h-8 w-auto object-contain" />
                     </Link>
 
@@ -109,6 +110,8 @@ const Navbar = () => {
                     <button
                         className="md:hidden z-50 text-white"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label="Toggle mobile menu"
+                        aria-expanded={isMobileMenuOpen}
                     >
                         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>

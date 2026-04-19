@@ -1,0 +1,43 @@
+# Brainvare — AI-First Creative Studio
+
+> Brainvare is an AI-first creative studio based in Kochi, Kerala, India. We integrate data, design, and technology to scale brands through strategic consulting, AI implementation, web/app development, and performance marketing.
+
+## Core Pages
+
+- [Home](https://www.brainvare.com/): Main landing page with services overview, client showreel, portfolio highlights, testimonials, and contact form
+- [Services](https://www.brainvare.com/services): Full service catalog — strategic consulting (AI readiness, digital transformation), AI implementation (LLM integration, RAG systems, intelligent agents), web & app development (Next.js, React Native, WebGL), performance marketing (SEO, AEO, programmatic ads, CRO)
+- [Work](https://www.brainvare.com/work): Portfolio of selected projects — web development, brand identity, app design, AI solutions
+- [About](https://www.brainvare.com/about): Company story, mission, and leadership team — founded by Arun AG (Founder) and Anila G Nair (Co-Founder)
+- [Blog](https://www.brainvare.com/blog): 20+ in-depth articles on AI marketing tools, SEO strategies, content automation, AEO, and digital marketing strategy
+- [Careers](https://www.brainvare.com/careers): Open positions with online application form
+
+## Key Services
+
+- AI Readiness Assessment & Digital Transformation Strategy
+- Custom LLM Integration & RAG Systems
+- Intelligent Agents & Automated Workflows
+- Next.js / React Web Applications
+- React Native Mobile Apps & WebGL Experiences
+- SEO & AEO (Answer Engine Optimization)
+- Programmatic Ad Buying & Conversion Rate Optimization
+- Brand Identity & Design Systems
+- Video Production & Content Creation
+
+## Featured Articles
+
+- [AI Tools Transforming Digital Marketing 2026](https://www.brainvare.com/blog/ai-tools-transforming-digital-marketing-2026): Comprehensive guide to 50+ AI tools for content, SEO, social, email, analytics, and advertising
+- [AI Answer Engine Optimization AEO Guide](https://www.brainvare.com/blog/ai-answer-engine-optimization-aeo-guide): How to optimize for AI search engines like Perplexity, ChatGPT, and Google AI Overviews
+- [AI SEO Tools to Rank Higher on Google](https://www.brainvare.com/blog/ai-seo-tools-rank-higher-google): AI-powered SEO tools and strategies for 2026
+- [AI Marketing Strategy Framework 2026](https://www.brainvare.com/blog/ai-marketing-strategy-framework-2026): Complete framework for building an AI-first marketing strategy
+- [Future of AI Marketing Predictions 2027](https://www.brainvare.com/blog/future-of-ai-marketing-predictions-2027): Forward-looking analysis of AI's impact on marketing
+- [AI Content Creation Tools Complete Guide](https://www.brainvare.com/blog/ai-content-creation-tools-complete-guide): Best AI tools for content creation in 2026
+- [AI Social Media Marketing Tools](https://www.brainvare.com/blog/ai-social-media-marketing-tools): AI-powered social media management and automation
+- [AI Email Marketing Automation Tools](https://www.brainvare.com/blog/ai-email-marketing-automation-tools): AI tools for email marketing automation and personalization
+- [AI Local Business Marketing Kerala](https://www.brainvare.com/blog/ai-local-business-marketing-kerala): AI marketing strategies for local businesses in Kerala
+
+## Contact
+
+- Email: care@brainvare.com
+- Phone: +91 80750 98869
+- Location: Infopark, Kochi, Kerala, India
+- Website: https://www.brainvare.com

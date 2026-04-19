@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight, Instagram, Linkedin, Twitter } from 'lucide-react';
 
 const Footer = () => {
     return (
-        <footer className="bg-brand-dark pt-12 md:pt-16 lg:pt-20 pb-6 md:pb-8 lg:pb-10 border-t border-white/10">
+        <footer className="bg-brand-dark pt-12 md:pt-16 lg:pt-20 pb-6 md:pb-8 lg:pb-10 border-t border-white/10" role="contentinfo">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-12 mb-10 md:mb-12 lg:mb-16">
                     <div className="col-span-2 md:col-span-1 space-y-4 md:space-y-6">
@@ -26,10 +27,10 @@ const Footer = () => {
                                 { name: 'Careers', path: '/careers' },
                             ].map((item) => (
                                 <li key={item.name}>
-                                    <a href={item.path} className="text-gray-400 hover:text-white transition-colors flex items-center group text-sm md:text-base">
+                                    <Link to={item.path} className="text-gray-400 hover:text-white transition-colors flex items-center group text-sm md:text-base">
                                         {item.name}
                                         <ArrowUpRight size={14} className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    </a>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
@@ -47,15 +48,15 @@ const Footer = () => {
                     <div>
                         <h4 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Socials</h4>
                         <div className="flex space-x-3 md:space-x-4">
-                            <a href="#" className="p-2.5 md:p-3 bg-white/5 rounded-full hover:bg-brand-red hover:text-white transition-all">
+                            <a href="https://www.linkedin.com/company/brainvare" target="_blank" rel="noopener noreferrer" aria-label="Brainvare on LinkedIn" className="p-2.5 md:p-3 bg-white/5 rounded-full hover:bg-brand-red hover:text-white transition-all">
                                 <Linkedin size={18} className="md:hidden" />
                                 <Linkedin size={20} className="hidden md:block" />
                             </a>
-                            <a href="#" className="p-2.5 md:p-3 bg-white/5 rounded-full hover:bg-brand-red hover:text-white transition-all">
+                            <a href="https://x.com/brainvare" target="_blank" rel="noopener noreferrer" aria-label="Brainvare on X (Twitter)" className="p-2.5 md:p-3 bg-white/5 rounded-full hover:bg-brand-red hover:text-white transition-all">
                                 <Twitter size={18} className="md:hidden" />
                                 <Twitter size={20} className="hidden md:block" />
                             </a>
-                            <a href="#" className="p-2.5 md:p-3 bg-white/5 rounded-full hover:bg-brand-red hover:text-white transition-all">
+                            <a href="https://www.instagram.com/brainvare" target="_blank" rel="noopener noreferrer" aria-label="Brainvare on Instagram" className="p-2.5 md:p-3 bg-white/5 rounded-full hover:bg-brand-red hover:text-white transition-all">
                                 <Instagram size={18} className="md:hidden" />
                                 <Instagram size={20} className="hidden md:block" />
                             </a>

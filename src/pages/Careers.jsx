@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, ArrowRight, Briefcase, X, CheckCircle, Loader2, Upload, Link as LinkIcon } from 'lucide-react';
 import { useCareers } from '../context/CareersContext';
+import SEOHead from '../components/SEOHead';
 
 const ApplicationForm = ({ job, onClose }) => {
     const { addApplication } = useCareers();
@@ -210,7 +211,18 @@ const Careers = () => {
     const [applyingJob, setApplyingJob] = useState(null);
 
     return (
-        <section className="min-h-screen bg-black text-white pt-32 pb-24">
+        <>
+            <SEOHead
+                title="Careers at Brainvare | Join Our AI-First Creative Team"
+                description="Join Brainvare — we're hiring talented designers, engineers, and strategists passionate about AI, video production, and cutting-edge technology. Explore open positions in Kochi, Kerala."
+                canonical="https://www.brainvare.com/careers"
+                keywords="jobs at Brainvare, AI agency careers Kerala, creative jobs Kochi, video editor jobs, web developer jobs India, AI engineer careers"
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://www.brainvare.com/' },
+                    { name: 'Careers', url: 'https://www.brainvare.com/careers' }
+                ]}
+            />
+            <section className="min-h-screen bg-black text-white pt-32 pb-24">
             <div className="container mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -296,6 +308,7 @@ const Careers = () => {
                 {applyingJob && <ApplicationForm job={applyingJob} onClose={() => setApplyingJob(null)} />}
             </AnimatePresence>
         </section>
+        </>
     );
 };
 

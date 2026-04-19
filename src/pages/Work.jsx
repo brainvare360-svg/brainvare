@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import SEOHead from '../components/SEOHead';
 
 const projects = [
     {
@@ -107,7 +108,25 @@ const ParallaxColumn = ({ children }) => {
 
 const Work = () => {
     return (
-        <section id="work" className="py-32 bg-black min-h-screen">
+        <>
+            <SEOHead
+                title="Our Work | AI-Driven Projects & Case Studies — Brainvare"
+                description="Explore Brainvare's portfolio of AI-driven projects — web development, brand identity, app design, and AI solutions. See how we've transformed businesses with cutting-edge technology."
+                canonical="https://www.brainvare.com/work"
+                keywords="AI project portfolio, web development case studies, brand identity design, app design portfolio, AI solutions showcase, digital agency portfolio Kerala"
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://www.brainvare.com/' },
+                    { name: 'Work', url: 'https://www.brainvare.com/work' }
+                ]}
+                customSchema={{
+                    "@context": "https://schema.org",
+                    "@type": "CollectionPage",
+                    "name": "Selected Work — Brainvare",
+                    "description": "A collection of cutting-edge AI-driven projects",
+                    "url": "https://www.brainvare.com/work"
+                }}
+            />
+            <section id="work" className="py-32 bg-black min-h-screen">
             <div className="container mx-auto px-6">
                 <div
                     className="flex flex-col md:flex-row justify-between items-end mb-16"
@@ -154,6 +173,7 @@ const Work = () => {
                 </div>
             </div>
         </section>
+        </>
     );
 };
 

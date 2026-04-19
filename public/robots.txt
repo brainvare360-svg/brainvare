@@ -1,6 +1,57 @@
+# Brainvare — robots.txt
+# Updated: 2026-04-19
+
+# Default rule: allow all except admin
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /admin
+Disallow: /api/
 
+# ============================================
+# AI Agent Crawlers — explicitly allowed
+# Per AEO best practices (Addy Osmani, 2026)
+# ============================================
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Google AI
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Common bad bots — block
+User-agent: Bytespider
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Sitemap & AEO discovery
 Sitemap: https://www.brainvare.com/sitemap.xml

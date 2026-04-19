@@ -1,9 +1,49 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import SEOHead from '../components/SEOHead';
 
 const Agency = () => {
     return (
-        <section className="min-h-screen bg-black text-white pt-32 pb-24">
+        <>
+            <SEOHead
+                title="About Brainvare | AI-First Creative Agency — Our Story & Team"
+                description="Meet the team behind Brainvare — rogue engineers, high-end designers, and strategic futurists building the post-digital reality. Founded by Arun AG and Anila G Nair in Kochi, Kerala."
+                canonical="https://www.brainvare.com/about"
+                keywords="about Brainvare, AI agency Kerala, creative studio Kochi, Arun AG founder, digital agency team India, AI-first company"
+                ogType="profile"
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://www.brainvare.com/' },
+                    { name: 'About', url: 'https://www.brainvare.com/about' }
+                ]}
+                customSchema={{
+                    "@context": "https://schema.org",
+                    "@type": "AboutPage",
+                    "name": "About Brainvare",
+                    "description": "Brainvare is an AI-first creative studio integrating data, design, and technology.",
+                    "url": "https://www.brainvare.com/about",
+                    "mainEntity": {
+                        "@type": "Organization",
+                        "name": "Brainvare",
+                        "founder": [
+                            {
+                                "@type": "Person",
+                                "name": "Arun AG",
+                                "jobTitle": "Founder",
+                                "image": "https://www.brainvare.com/team/arun.png",
+                                "worksFor": { "@type": "Organization", "name": "Brainvare" }
+                            },
+                            {
+                                "@type": "Person",
+                                "name": "Anila G Nair",
+                                "jobTitle": "Co-Founder",
+                                "image": "https://www.brainvare.com/team/anila.png",
+                                "worksFor": { "@type": "Organization", "name": "Brainvare" }
+                            }
+                        ]
+                    }
+                }}
+            />
+            <section className="min-h-screen bg-black text-white pt-32 pb-24">
             <div className="container mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -59,6 +99,7 @@ const Agency = () => {
                 </motion.div>
             </div>
         </section>
+        </>
     );
 };
 

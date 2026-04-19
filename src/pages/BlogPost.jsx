@@ -57,6 +57,8 @@ const BlogPost = () => {
                 description={post.metaDescription}
                 canonical={`https://www.brainvare.com/blog/${post.slug}`}
                 ogType="article"
+                keywords={post.tags.join(', ')}
+                ogImage={post.ogImage || 'https://www.brainvare.com/logo.png'}
                 article={{
                     title: post.title,
                     description: post.metaDescription,
