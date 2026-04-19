@@ -1,21 +1,24 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
-    const navigate = useNavigate();
-    const location = useLocation();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const scrollToContact = (e) => {
         e.preventDefault();
-        if (location.pathname === '/') {
+        if (pathname === '/') {
             document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
         } else {
-            navigate('/');
+            router.push('/');
             setTimeout(() => {
                 document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
             }, 500);
@@ -82,7 +85,7 @@ const Navbar = () => {
                 aria-label="Main navigation"
             >
                 <div className="container mx-auto px-6 flex items-center justify-between">
-                    <Link to="/" className="z-50 text-2xl font-bold tracking-tighter text-white flex items-center" aria-label="Brainvare — Go to homepage">
+                    <Link href="/" className="z-50 text-2xl font-bold tracking-tighter text-white flex items-center" aria-label="Brainvare — Go to homepage">
                         <img src="/logo.png" alt="Brainvare" className="h-6 sm:h-7 md:h-8 w-auto object-contain" />
                     </Link>
 
@@ -96,7 +99,7 @@ const Navbar = () => {
                                 onMouseLeave={() => setActiveDropdown(null)}
                             >
                                 <Link
-                                    to={link.path}
+                                    href={link.path}
                                     className="text-sm font-medium text-gray-300 hover:text-white transition-colors py-4"
                                 >
                                     {link.name}
@@ -117,7 +120,7 @@ const Navbar = () => {
                                                 {link.subItems.map((sub, i) => (
                                                     <Link
                                                         key={i}
-                                                        to={sub.path}
+                                                        href={sub.path}
                                                         className="group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 transition-colors"
                                                     >
                                                         <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{sub.name}</span>
@@ -164,7 +167,7 @@ const Navbar = () => {
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.name}
-                                    to={link.path}
+                                    href={link.path}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="text-3xl font-bold text-white hover:text-brand-red transition-colors"
                                 >

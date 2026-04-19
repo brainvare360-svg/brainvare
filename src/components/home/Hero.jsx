@@ -1,20 +1,22 @@
+'use client'
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useRouter, usePathname } from 'next/navigation';
 
 const Hero = () => {
     const { content } = useContent();
     const { hero } = content;
-    const navigate = useNavigate();
-    const location = useLocation();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const scrollToContact = () => {
-        if (location.pathname === '/') {
+        if (pathname === '/') {
             document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
         } else {
-            navigate('/');
+            router.push('/');
             setTimeout(() => {
                 document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
             }, 500);

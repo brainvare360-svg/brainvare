@@ -1,7 +1,9 @@
+'use client'
+
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Search, ToggleRight, PenTool, Layout, Type, Palette, MousePointer2, Grid, Layers, X as XIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const BrandingCollage = () => {
     const containerRef = useRef(null);
@@ -76,7 +78,7 @@ const BrandingCollage = () => {
                     <p className="text-base md:text-lg lg:text-xl text-gray-400 mb-6 md:mb-8 lg:mb-10 max-w-md leading-relaxed">
                         A living identity. Kinetic typography, vibrating color theory, and responsive component architecture.
                     </p>
-                    <Link to="/about" className="px-6 py-3 md:px-8 md:py-4 border border-white/20 bg-white/5 backdrop-blur-md text-white font-bold rounded-full hover:bg-white hover:text-black transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] text-sm md:text-base inline-block">
+                    <Link href="/about" className="px-6 py-3 md:px-8 md:py-4 border border-white/20 bg-white/5 backdrop-blur-md text-white font-bold rounded-full hover:bg-white hover:text-black transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] text-sm md:text-base inline-block">
                         Explore Guidelines
                     </Link>
                 </motion.div>

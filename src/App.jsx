@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useEffect, Suspense, lazy } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 import PublicLayout from './layouts/PublicLayout';
 import Lenis from 'lenis';
 
@@ -29,7 +31,7 @@ const PageFallback = () => (
 );
 
 function App() {
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     // Smooth Scrolling
@@ -59,7 +61,7 @@ function App() {
   // Scroll to top on route change
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-brand-dark text-white selection:bg-brand-red selection:text-white">

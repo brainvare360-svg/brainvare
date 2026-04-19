@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { Lock, Mail, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
@@ -11,11 +13,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const { login } = useAuth();
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    // Redirect to where they came from, or /admin by default
-    const from = location.state?.from?.pathname || '/admin';
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,7 +22,7 @@ const Login = () => {
 
         try {
             await login(email, password);
-            navigate(from, { replace: true });
+            router.push('/admin');
         } catch (err) {
             setError(err.message || 'Login failed. Please try again.');
         } finally {

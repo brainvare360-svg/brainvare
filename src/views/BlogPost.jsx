@@ -1,22 +1,25 @@
+'use client'
+
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import SEOHead from '../components/SEOHead';
 import { getPostBySlug, getRelatedPosts } from '../data/blogPosts';
 
 const BlogPost = () => {
     const { slug } = useParams();
-    const navigate = useNavigate();
+    const router = useRouter();
     const post = getPostBySlug(slug);
     const [activeSection, setActiveSection] = useState('');
 
     useEffect(() => {
         if (!post) {
-            navigate('/blog');
+            router.push('/blog');
             return;
         }
         window.scrollTo(0, 0);
-    }, [post, navigate, slug]);
+    }, [post, router, slug]);
 
     // Table of Contents scroll spy
     useEffect(() => {
@@ -87,9 +90,9 @@ const BlogPost = () => {
                         className="flex items-center gap-2 text-sm text-gray-500 mb-8"
                         aria-label="Breadcrumb"
                     >
-                        <Link to="/" className="hover:text-white transition-colors">Home</Link>
+                        <Link href="/" className="hover:text-white transition-colors">Home</Link>
                         <span>/</span>
-                        <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
+                        <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
                         <span>/</span>
                         <span className="text-gray-400 truncate max-w-[200px]">{post.title}</span>
                     </motion.nav>
@@ -226,8 +229,7 @@ const BlogPost = () => {
                         <div className="mt-12 p-8 bg-gradient-to-br from-brand-red/10 to-purple-500/5 border border-brand-red/20 rounded-2xl text-center">
                             <h3 className="text-2xl font-bold text-white mb-3">Ready to Transform Your Marketing with AI?</h3>
                             <p className="text-gray-400 mb-6 max-w-lg mx-auto">Let Brainvare's AI-first team build marketing systems that deliver measurable results. Book a free strategy call today.</p>
-                            <Link
-                                to="/contact"
+                            <Link href="/contact"
                                 className="inline-flex items-center gap-2 px-8 py-3 bg-brand-red text-white font-semibold rounded-full hover:bg-red-600 transition-colors"
                                 id="cta-contact"
                             >
@@ -246,7 +248,7 @@ const BlogPost = () => {
                         <h2 className="text-2xl md:text-3xl font-bold text-white mb-10">Related Articles</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {relatedPosts.map(rp => (
-                                <Link key={rp.slug} to={`/blog/${rp.slug}`} className="block group" id={`related-${rp.slug}`}>
+                                <Link key={rp.slug} href={`/blog/${rp.slug}`} className="block group" id={`related-${rp.slug}`}>
                                     <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-6 hover:border-brand-red/30 hover:bg-white/[0.05] transition-all duration-300 h-full flex flex-col">
                                         <span className="text-xs text-brand-red font-medium mb-3">{rp.category}</span>
                                         <h3 className="text-lg font-bold text-white mb-3 group-hover:text-brand-red transition-colors leading-snug line-clamp-2">

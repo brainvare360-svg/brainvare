@@ -1,5 +1,7 @@
+'use client'
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useContent } from '../../context/ContentContext';
 import { useEnquiries } from '../../context/EnquiriesContext';
 import { BarChart3, Users, Briefcase, ArrowUpRight, MessageSquare, Mail, Clock, ArrowRight } from 'lucide-react';
@@ -104,8 +106,7 @@ const DashboardHome = () => {
             <div className="bg-[#111] border border-white/5 rounded-2xl overflow-hidden">
                 <div className="p-6 border-b border-white/5 flex items-center justify-between">
                     <h2 className="text-xl font-bold text-white">Recent Enquiries</h2>
-                    <Link
-                        to="/admin/enquiries"
+                    <Link href="/admin/enquiries"
                         className="text-sm text-brand-red hover:text-red-400 transition-colors flex items-center gap-1"
                     >
                         View All <ArrowRight size={14} />

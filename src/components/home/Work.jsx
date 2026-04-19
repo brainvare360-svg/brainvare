@@ -1,7 +1,9 @@
+'use client'
+
 import React, { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const projects = [
     {
@@ -122,7 +124,7 @@ const Work = () => {
                             A collection of our most recent cutting-edge projects. Hover to preview.
                         </p>
                     </div>
-                    <Link to="/work" className="hidden md:flex items-center gap-2 text-gray-400 hover:text-white transition-colors group">
+                    <Link href="/work" className="hidden md:flex items-center gap-2 text-gray-400 hover:text-white transition-colors group">
                         See all projects <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </Link>
                 </div>
@@ -152,7 +154,7 @@ const Work = () => {
                 </div>
 
                 <div className="mt-12 text-center md:hidden">
-                    <Link to="/work" className="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors group">
+                    <Link href="/work" className="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors group">
                         See all projects <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </Link>
                 </div>

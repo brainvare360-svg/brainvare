@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEOHead from '../components/SEOHead';
 import { blogPosts, categories } from '../data/blogPosts';
@@ -111,7 +113,7 @@ const BlogList = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.4 }}
                     >
-                        <Link to={`/blog/${featuredPost.slug}`} className="block group" id="featured-post">
+                        <Link href={`/blog/${featuredPost.slug}`} className="block group" id="featured-post">
                             <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-brand-red/10 via-purple-500/5 to-transparent border border-white/10 p-8 md:p-12 hover:border-brand-red/30 transition-all duration-500">
                                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-red/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                 <span className="inline-block px-3 py-1 rounded-full bg-brand-red/20 text-brand-red text-xs font-semibold tracking-wider uppercase mb-4">
@@ -156,7 +158,7 @@ const BlogList = () => {
                                     transition={{ duration: 0.4, delay: i * 0.05 }}
                                     id={`post-${post.slug}`}
                                 >
-                                    <Link to={`/blog/${post.slug}`} className="block group h-full">
+                                    <Link href={`/blog/${post.slug}`} className="block group h-full">
                                         <div className="h-full rounded-2xl bg-white/[0.03] border border-white/10 p-6 hover:border-brand-red/30 hover:bg-white/[0.05] transition-all duration-300 flex flex-col">
                                             <div className="flex items-center gap-3 mb-4">
                                                 <span className="px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-medium">

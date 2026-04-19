@@ -1,5 +1,7 @@
+'use client'
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ArrowUpRight, Instagram, Linkedin, Twitter } from 'lucide-react';
 
 const Footer = () => {
@@ -27,7 +29,7 @@ const Footer = () => {
                                 { name: 'Careers', path: '/careers' },
                             ].map((item) => (
                                 <li key={item.name}>
-                                    <Link to={item.path} className="text-gray-400 hover:text-white transition-colors flex items-center group text-sm md:text-base">
+                                    <Link href={item.path} className="text-gray-400 hover:text-white transition-colors flex items-center group text-sm md:text-base">
                                         {item.name}
                                         <ArrowUpRight size={14} className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </Link>

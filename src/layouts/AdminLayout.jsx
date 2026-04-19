@@ -1,16 +1,19 @@
+'use client'
+
 import React from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { LayoutDashboard, FileText, Layers, Briefcase, Settings, LogOut, ExternalLink, MessageSquare, Film } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const AdminLayout = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
+const AdminLayout = ({ children }) => {
+    const pathname = usePathname();
+    const router = useRouter();
     const { logout } = useAuth();
 
     const handleLogout = async () => {
         await logout();
-        navigate('/admin/login');
+        router.push('/admin/login');
     };
 
     const navItems = [
@@ -25,8 +28,8 @@ const AdminLayout = () => {
     ];
 
     const isActive = (path) => {
-        if (path === '/admin' && location.pathname === '/admin') return true;
-        if (path !== '/admin' && location.pathname.startsWith(path)) return true;
+        if (path === '/admin' && pathname === '/admin') return true;
+        if (path !== '/admin' && pathname.startsWith(path)) return true;
         return false;
     };
 
@@ -55,7 +58,7 @@ const AdminLayout = () => {
                 </nav>
 
                 <div className="p-4 border-t border-white/10 space-y-2">
-                    <Link to="/" target="_blank" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-all text-sm">
+                    <Link href="/" target="_blank" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-all text-sm">
                         <ExternalLink size={18} />
                         View Website
                     </Link>
@@ -70,7 +73,7 @@ const AdminLayout = () => {
             <main className="flex-1 overflow-y-auto bg-black relative" data-lenis-prevent>
                 <div className="absolute inset-0 bg-dotted-pattern opacity-[0.03] pointer-events-none" />
                 <div className="max-w-6xl mx-auto p-8">
-                    <Outlet />
+                    {children}
                 </div>
             </main>
         </div>

@@ -1,5 +1,6 @@
+'use client'
+
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 
 const SEOHead = ({
     title = 'Brainvare | AI-First Creative Studio',
@@ -142,7 +143,7 @@ const SEOHead = ({
     } : null;
 
     return (
-        <Helmet>
+        <>
             {/* Primary Meta */}
             <title>{title}</title>
             <meta name="description" content={description} />
@@ -210,7 +211,7 @@ const SEOHead = ({
                     {JSON.stringify(customSchema)}
                 </script>
             )}
-        </Helmet>
+        </>
     );
 };
 
