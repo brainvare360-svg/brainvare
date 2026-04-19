@@ -2,7 +2,7 @@ export const defaultContent = {
     hero: {
         title: "AI-First Creative,\nProduction & Performance.",
         subtitle: "We blend human creativity with AI efficiency to deliver stunning results.",
-        videoUrl: "https://player.vimeo.com/external/494252666.sd.mp4?s=2650085a1a&profile_id=164&oauth2_token_id=57447761",
+        videoUrl: "https://cdn.pixabay.com/video/2023/04/23/160109-820542385_large.mp4",
         ctaText: "Discover Our Work"
     },
     showreel: {
