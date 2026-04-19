@@ -43,13 +43,13 @@
   }
 }
 
-/* Hero CSS animations — replacing framer-motion for above-the-fold */
+/* Hero CSS animations — content visible immediately for LCP */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(50px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { transform: translateY(30px); }
+  to { transform: translateY(0); }
 }
 @keyframes fadeIn {
-  from { opacity: 0; }
+  from { opacity: 0.01; }
   to { opacity: 1; }
 }
 @keyframes slideDown {
