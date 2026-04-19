@@ -117,7 +117,7 @@ const Navbar = () => {
                                                     href={sub.path}
                                                     className="group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 transition-colors"
                                                 >
-                                                    <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{sub.name}</span>
+                                                    <span className="text-sm text-gray-300 group-hover:text-white transition-colors">{sub.name}</span>
                                                     <div className="w-1.5 h-1.5 rounded-full bg-brand-red opacity-0 group-hover:opacity-100 transition-opacity" />
                                                 </Link>
                                             ))}

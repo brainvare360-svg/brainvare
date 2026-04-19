@@ -29,7 +29,7 @@ const Footer = () => {
                                 { name: 'Careers', path: '/careers' },
                             ].map((item) => (
                                 <li key={item.name}>
-                                    <Link href={item.path} className="text-gray-400 hover:text-white transition-colors flex items-center group text-sm md:text-base">
+                                    <Link href={item.path} className="text-gray-300 hover:text-white transition-colors flex items-center group text-sm md:text-base">
                                         {item.name}
                                         <ArrowUpRight size={14} className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </Link>
@@ -40,7 +40,7 @@ const Footer = () => {
 
                     <div>
                         <p className="text-base md:text-lg font-semibold text-white mb-4 md:mb-6">Contact</p>
-                        <div className="space-y-3 md:space-y-4 text-gray-400 text-sm md:text-base">
+                        <div className="space-y-3 md:space-y-4 text-gray-300 text-sm md:text-base">
                             <p><a href="mailto:care@brainvare.com" className="hover:text-white transition-colors">care@brainvare.com</a></p>
                             <p><a href="tel:+918075098869" className="hover:text-white transition-colors">+91 80750 98869</a></p>
                             <p>Kochi, Kerala, India</p>
@@ -66,7 +66,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row justify-between items-center pt-6 md:pt-8 border-t border-white/5 text-xs md:text-sm text-gray-500">
+                <div className="flex flex-col md:flex-row justify-between items-center pt-6 md:pt-8 border-t border-white/5 text-xs md:text-sm text-gray-400">
                     <p>© {new Date().getFullYear()} Brainvare. All rights reserved.</p>
                     <div className="flex space-x-6 mt-4 md:mt-0">
                         <a href="mailto:care@brainvare.com?subject=Privacy%20Policy%20Request" className="hover:text-white transition-colors">Privacy Policy</a>
