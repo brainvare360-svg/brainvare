@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ArrowRight, Play } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import { useRouter, usePathname } from 'next/navigation';
@@ -10,19 +10,6 @@ const Hero = () => {
     const { hero } = content;
     const router = useRouter();
     const pathname = usePathname();
-    const [showVideo, setShowVideo] = useState(false);
-    const [isDesktop, setIsDesktop] = useState(false);
-
-    useEffect(() => {
-        // Only load hero video on desktop (mobile: gradient only = fast LCP)
-        const desktop = window.innerWidth >= 768;
-        setIsDesktop(desktop);
-        if (desktop) {
-            // Defer video load until after LCP is locked in
-            const timer = setTimeout(() => setShowVideo(true), 1500);
-            return () => clearTimeout(timer);
-        }
-    }, []);
 
     const scrollToContact = () => {
         if (pathname === '/') {
@@ -37,26 +24,10 @@ const Hero = () => {
 
     return (
         <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-dark">
-            {/* Background — gradient on mobile, video on desktop */}
+            {/* Premium gradient background — no external video = zero console errors */}
             <div className="absolute inset-0 overflow-hidden">
-                {showVideo && isDesktop && (
-                    <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="none"
-                        className="w-full h-full object-cover opacity-60 mix-blend-overlay"
-                    >
-                        <source src={hero?.videoUrl || "https://cdn.pixabay.com/video/2023/04/23/160109-820542385_large.mp4"} type="video/mp4" />
-                    </video>
-                )}
-                {/* Gradient overlay — always visible, acts as background on mobile */}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/50 to-transparent" />
-                {/* Subtle animated gradient for mobile (replaces video) */}
-                {!isDesktop && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-brand-red/10 via-transparent to-purple-900/10 animate-[fadeIn_2s_ease-out_both]" />
-                )}
+                <div className="absolute inset-0 bg-gradient-to-br from-brand-red/10 via-transparent to-purple-900/10 animate-[fadeIn_2s_ease-out_both]" />
             </div>
 
             <div className="relative z-10 container mx-auto px-6 text-center">
