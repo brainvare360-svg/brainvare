@@ -26,7 +26,12 @@ export const ContentProvider = ({ children }) => {
                 if (res.ok) {
                     const data = await res.json();
                     if (data && Object.keys(data).length > 0) {
-                        setContent({ ...defaultContent, ...data });
+                        // Sanitize: replace any expired Vimeo URLs with working fallback
+                        const merged = { ...defaultContent, ...data };
+                        if (merged.hero?.videoUrl?.includes('player.vimeo.com/external')) {
+                            merged.hero = { ...merged.hero, videoUrl: defaultContent.hero.videoUrl };
+                        }
+                        setContent(merged);
                     }
                 }
             } catch (error) {
