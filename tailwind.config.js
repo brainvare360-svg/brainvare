@@ -8,7 +8,7 @@ export default {
         extend: {
             colors: {
                 brand: {
-                    red: '#ff2e2e', // Vibrant red for accents
+                    red: '#c62828', // Deep red — WCAG AA contrast with white text
                     dark: '#0a0a0a', // Deep dark background
                     gray: '#1a1a1a', // Lighter dark for cards
                 }
