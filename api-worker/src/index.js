@@ -261,6 +261,45 @@ app.delete('/delete', requireAuth, async (c) => {
 });
 
 // ═══════════════════════════════════════════════════════════
+// CAREERS & APPLICATIONS (R2 JSON storage)
+// ═══════════════════════════════════════════════════════════
+
+const CAREERS_KEY = 'data/careers.json';
+const APPLICATIONS_KEY = 'data/applications.json';
+
+app.get('/careers', async (c) => {
+    const obj = await c.env.BUCKET.get(CAREERS_KEY);
+    if (!obj) return c.json({ items: [] });
+    const data = await obj.text();
+    return c.json(JSON.parse(data));
+});
+
+app.put('/careers', requireAuth, async (c) => {
+    const body = await c.req.text();
+    JSON.parse(body);
+    await c.env.BUCKET.put(CAREERS_KEY, body, {
+        httpMetadata: { contentType: 'application/json' },
+    });
+    return c.json({ success: true });
+});
+
+app.get('/applications', async (c) => {
+    const obj = await c.env.BUCKET.get(APPLICATIONS_KEY);
+    if (!obj) return c.json({ items: [] });
+    const data = await obj.text();
+    return c.json(JSON.parse(data));
+});
+
+app.put('/applications', async (c) => {
+    const body = await c.req.text();
+    JSON.parse(body);
+    await c.env.BUCKET.put(APPLICATIONS_KEY, body, {
+        httpMetadata: { contentType: 'application/json' },
+    });
+    return c.json({ success: true });
+});
+
+// ═══════════════════════════════════════════════════════════
 // HEALTH CHECK
 // ═══════════════════════════════════════════════════════════
 

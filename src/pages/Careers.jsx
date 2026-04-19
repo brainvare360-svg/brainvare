@@ -1,11 +1,206 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, Clock, ArrowRight, Briefcase } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, Clock, ArrowRight, Briefcase, X, CheckCircle, Loader2, Upload, Link as LinkIcon } from 'lucide-react';
 import { useCareers } from '../context/CareersContext';
+
+const ApplicationForm = ({ job, onClose }) => {
+    const { addApplication } = useCareers();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [form, setForm] = useState({
+        fullName: '', email: '', phone: '', currentRole: '',
+        experience: '', portfolio: '', linkedin: '',
+        coverLetter: '', resumeLink: '', availability: 'Immediately',
+        expectedSalary: '', howDidYouHear: ''
+    });
+
+    const handleChange = (e) => {
+        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        await new Promise(r => setTimeout(r, 800));
+        addApplication({
+            ...form,
+            jobId: job.id,
+            jobTitle: job.title,
+            appliedDate: new Date().toISOString(),
+            status: 'new'
+        });
+        setIsSubmitting(false);
+        setIsSuccess(true);
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-xl flex items-start justify-center overflow-y-auto p-4 md:p-8"
+            onClick={onClose}
+        >
+            <motion.div
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.98 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="w-full max-w-2xl bg-[#111] border border-white/10 rounded-2xl my-4 relative"
+                onClick={e => e.stopPropagation()}
+            >
+                <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors z-10">
+                    <X size={20} />
+                </button>
+
+                <div className="p-6 md:p-8 border-b border-white/10">
+                    <div className="text-brand-red font-mono text-xs uppercase tracking-widest mb-2">Apply for Position</div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white">{job.title}</h2>
+                    <div className="flex gap-3 mt-2 text-sm text-gray-400">
+                        <span className="flex items-center gap-1"><Clock size={13} /> {job.type}</span>
+                        <span className="flex items-center gap-1"><MapPin size={13} /> {job.location}</span>
+                    </div>
+                </div>
+
+                {isSuccess ? (
+                    <div className="p-8 md:p-12 text-center">
+                        <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <CheckCircle size={48} className="text-green-500" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-white mb-3">Application Submitted!</h3>
+                        <p className="text-gray-400 mb-6 max-w-sm mx-auto">Thank you for your interest. Our team will review your application and get back to you within 3-5 business days.</p>
+                        <button onClick={onClose} className="px-6 py-3 bg-brand-red text-white font-semibold rounded-full hover:bg-red-700 transition-colors">
+                            Close
+                        </button>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Full Name *</label>
+                                <input name="fullName" value={form.fullName} onChange={handleChange} required
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors"
+                                    placeholder="Your full name" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Email *</label>
+                                <input name="email" type="email" value={form.email} onChange={handleChange} required
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors"
+                                    placeholder="you@email.com" />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Phone *</label>
+                                <input name="phone" value={form.phone} onChange={handleChange} required
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors"
+                                    placeholder="+91 XXXXX XXXXX" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Current Role</label>
+                                <input name="currentRole" value={form.currentRole} onChange={handleChange}
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors"
+                                    placeholder="e.g. Senior Video Editor" />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Years of Experience *</label>
+                                <select name="experience" value={form.experience} onChange={handleChange} required
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors">
+                                    <option value="">Select</option>
+                                    <option value="0-1">0-1 years</option>
+                                    <option value="1-3">1-3 years</option>
+                                    <option value="3-5">3-5 years</option>
+                                    <option value="5-8">5-8 years</option>
+                                    <option value="8+">8+ years</option>
+                                </select>
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Availability</label>
+                                <select name="availability" value={form.availability} onChange={handleChange}
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors">
+                                    <option value="Immediately">Immediately</option>
+                                    <option value="2 weeks">2 weeks notice</option>
+                                    <option value="1 month">1 month notice</option>
+                                    <option value="2 months">2 months notice</option>
+                                    <option value="3+ months">3+ months</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider flex items-center gap-1.5"><LinkIcon size={12} /> Portfolio / Showreel URL *</label>
+                                <input name="portfolio" value={form.portfolio} onChange={handleChange} required
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors"
+                                    placeholder="https://your-portfolio.com" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider flex items-center gap-1.5"><LinkIcon size={12} /> LinkedIn</label>
+                                <input name="linkedin" value={form.linkedin} onChange={handleChange}
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors"
+                                    placeholder="https://linkedin.com/in/yourname" />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider flex items-center gap-1.5"><Upload size={12} /> Resume / CV Link *</label>
+                                <input name="resumeLink" value={form.resumeLink} onChange={handleChange} required
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors"
+                                    placeholder="Google Drive / Dropbox link" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Expected Salary (Monthly ₹)</label>
+                                <input name="expectedSalary" value={form.expectedSalary} onChange={handleChange}
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors"
+                                    placeholder="e.g. ₹40,000" />
+                            </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Cover Letter / Why Brainvare? *</label>
+                            <textarea name="coverLetter" value={form.coverLetter} onChange={handleChange} required rows={4}
+                                className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors resize-none"
+                                placeholder="Tell us why you'd be a great fit and what excites you about this role..." />
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">How did you hear about us?</label>
+                            <select name="howDidYouHear" value={form.howDidYouHear} onChange={handleChange}
+                                className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-red transition-colors">
+                                <option value="">Select</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="LinkedIn">LinkedIn</option>
+                                <option value="Google">Google Search</option>
+                                <option value="Referral">Referral</option>
+                                <option value="Website">Website</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" disabled={isSubmitting}
+                            className="w-full py-4 bg-brand-red text-white font-bold rounded-xl hover:bg-red-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base">
+                            {isSubmitting ? (
+                                <><Loader2 size={20} className="animate-spin" /> Submitting...</>
+                            ) : (
+                                <>Submit Application <ArrowRight size={18} /></>
+                            )}
+                        </button>
+                    </form>
+                )}
+            </motion.div>
+        </motion.div>
+    );
+};
 
 const Careers = () => {
     const { careersData } = useCareers();
     const activeJobs = careersData.filter(job => job.status === 'active');
+    const [applyingJob, setApplyingJob] = useState(null);
 
     return (
         <section className="min-h-screen bg-black text-white pt-32 pb-24">
@@ -25,11 +220,7 @@ const Careers = () => {
                 </motion.div>
 
                 {activeJobs.length === 0 ? (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-center py-20"
-                    >
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
                         <Briefcase size={48} className="mx-auto mb-6 text-gray-600" />
                         <h3 className="text-2xl font-bold mb-3">No Open Positions</h3>
                         <p className="text-gray-400">Check back soon — we're always growing.</p>
@@ -49,20 +240,16 @@ const Careers = () => {
                                     <div>
                                         <h3 className="text-xl md:text-2xl font-bold group-hover:text-brand-red transition-colors">{job.title}</h3>
                                         <div className="flex flex-wrap gap-3 mt-2">
-                                            <span className="flex items-center gap-1.5 text-sm text-gray-400">
-                                                <Clock size={14} /> {job.type}
-                                            </span>
-                                            <span className="flex items-center gap-1.5 text-sm text-gray-400">
-                                                <MapPin size={14} /> {job.location}
-                                            </span>
+                                            <span className="flex items-center gap-1.5 text-sm text-gray-400"><Clock size={14} /> {job.type}</span>
+                                            <span className="flex items-center gap-1.5 text-sm text-gray-400"><MapPin size={14} /> {job.location}</span>
                                         </div>
                                     </div>
-                                    <a
-                                        href={`mailto:care@brainvare.com?subject=Application: ${job.title}&body=Hi, I'm interested in the ${job.title} position.%0A%0APlease find my portfolio/resume attached.`}
+                                    <button
+                                        onClick={() => setApplyingJob(job)}
                                         className="inline-flex items-center gap-2 px-6 py-3 bg-brand-red text-white font-semibold rounded-full hover:bg-red-700 transition-colors text-sm md:text-base whitespace-nowrap"
                                     >
                                         Apply Now <ArrowRight size={16} />
-                                    </a>
+                                    </button>
                                 </div>
                                 <p className="text-gray-400 mb-4">{job.description}</p>
                                 <div>
@@ -70,7 +257,7 @@ const Careers = () => {
                                     <ul className="space-y-1.5">
                                         {job.requirements.map((req, idx) => (
                                             <li key={idx} className="text-sm text-gray-400 flex items-start gap-2">
-                                                <span className="text-brand-red mt-1.5 w-1 h-1 rounded-full bg-brand-red flex-shrink-0" />
+                                                <span className="w-1 h-1 rounded-full bg-brand-red mt-2 flex-shrink-0" />
                                                 {req}
                                             </li>
                                         ))}
@@ -91,14 +278,16 @@ const Careers = () => {
                     <p className="text-gray-400 mb-6 max-w-lg mx-auto">
                         We're always open to hearing from exceptional talent. Drop us your portfolio and resume.
                     </p>
-                    <a
-                        href="mailto:care@brainvare.com?subject=General Application&body=Hi, I'd like to explore career opportunities at Brainvare."
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-brand-red text-white font-bold rounded-full hover:bg-red-700 transition-colors"
-                    >
+                    <a href="mailto:care@brainvare.com?subject=General Application"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-brand-red text-white font-bold rounded-full hover:bg-red-700 transition-colors">
                         Send Your Portfolio <ArrowRight size={18} />
                     </a>
                 </motion.div>
             </div>
+
+            <AnimatePresence>
+                {applyingJob && <ApplicationForm job={applyingJob} onClose={() => setApplyingJob(null)} />}
+            </AnimatePresence>
         </section>
     );
 };

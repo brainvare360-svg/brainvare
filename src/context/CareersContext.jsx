@@ -61,8 +61,11 @@ export const useCareers = () => useContext(CareersContext);
 
 export const CareersProvider = ({ children }) => {
     const [careersData, setCareersData] = useState(defaultCareers);
+    const [applications, setApplications] = useState([]);
     const isInitialLoad = useRef(true);
+    const isInitialAppLoad = useRef(true);
 
+    // Fetch careers
     useEffect(() => {
         const fetchCareers = async () => {
             try {
@@ -82,25 +85,61 @@ export const CareersProvider = ({ children }) => {
         fetchCareers();
     }, []);
 
+    // Fetch applications
+    useEffect(() => {
+        const fetchApps = async () => {
+            try {
+                const res = await fetch(`${API_URL}/applications`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.items && Array.isArray(data.items)) {
+                        setApplications(data.items);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load applications:", error);
+            } finally {
+                isInitialAppLoad.current = false;
+            }
+        };
+        fetchApps();
+    }, []);
+
+    // Auto-save careers
     useEffect(() => {
         if (isInitialLoad.current) return;
-        const saveCareers = async () => {
+        const save = async () => {
             try {
-                const res = await fetch(`${API_URL}/careers`, {
+                await fetch(`${API_URL}/careers`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ items: careersData }),
                 });
-                if (res.ok) {
-                    console.log(`✅ Auto-saved ${careersData.length} careers`);
-                }
             } catch (error) {
-                console.error("❌ Failed to save careers:", error);
+                console.error("Failed to save careers:", error);
             }
         };
-        saveCareers();
+        save();
     }, [careersData]);
 
+    // Auto-save applications
+    useEffect(() => {
+        if (isInitialAppLoad.current) return;
+        const save = async () => {
+            try {
+                await fetch(`${API_URL}/applications`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: applications }),
+                });
+            } catch (error) {
+                console.error("Failed to save applications:", error);
+            }
+        };
+        save();
+    }, [applications]);
+
+    // Career CRUD
     const addCareer = (career) => {
         const newCareer = { ...career, id: `c${Date.now()}`, postedDate: new Date().toISOString().split('T')[0] };
         setCareersData(prev => [newCareer, ...prev]);
@@ -115,8 +154,26 @@ export const CareersProvider = ({ children }) => {
         setCareersData(prev => prev.filter(c => c.id !== id));
     };
 
+    // Application CRUD
+    const addApplication = (app) => {
+        const newApp = { ...app, id: `app${Date.now()}` };
+        setApplications(prev => [newApp, ...prev]);
+        return newApp;
+    };
+
+    const updateApplication = (id, updates) => {
+        setApplications(prev => prev.map(a => a.id === id ? { ...a, ...updates } : a));
+    };
+
+    const deleteApplication = (id) => {
+        setApplications(prev => prev.filter(a => a.id !== id));
+    };
+
     return (
-        <CareersContext.Provider value={{ careersData, addCareer, updateCareer, deleteCareer }}>
+        <CareersContext.Provider value={{
+            careersData, addCareer, updateCareer, deleteCareer,
+            applications, addApplication, updateApplication, deleteApplication
+        }}>
             {children}
         </CareersContext.Provider>
     );
