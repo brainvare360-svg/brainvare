@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
@@ -76,11 +75,8 @@ const Navbar = () => {
 
     return (
         <>
-            <motion.nav
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-4 bg-brand-dark/80 backdrop-blur-md border-b border-white/10' : 'py-6 bg-transparent'
+            <nav
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 animate-[slideDown_0.6s_cubic-bezier(0.16,1,0.3,1)_both] ${isScrolled ? 'py-4 bg-brand-dark/80 backdrop-blur-md border-b border-white/10' : 'py-6 bg-transparent'
                     }`}
                 aria-label="Main navigation"
             >
@@ -105,32 +101,29 @@ const Navbar = () => {
                                     {link.name}
                                 </Link>
 
-                                {/* Premium Dropdown */}
-                                <AnimatePresence>
-                                    {activeDropdown === link.name && link.subItems && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10, rotateX: -10 }}
-                                            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                                            exit={{ opacity: 0, y: 10, rotateX: -10 }}
-                                            transition={{ duration: 0.2 }}
-                                            style={{ transformOrigin: "top center" }}
-                                            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl z-50 overflow-hidden"
-                                        >
-                                            <div className="flex flex-col">
-                                                {link.subItems.map((sub, i) => (
-                                                    <Link
-                                                        key={i}
-                                                        href={sub.path}
-                                                        className="group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 transition-colors"
-                                                    >
-                                                        <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{sub.name}</span>
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-brand-red opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+                                {/* Premium Dropdown — CSS only */}
+                                {link.subItems && (
+                                    <div
+                                        className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl z-50 overflow-hidden transition-all duration-200 origin-top ${
+                                            activeDropdown === link.name
+                                                ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
+                                                : 'opacity-0 translate-y-2 scale-95 pointer-events-none'
+                                        }`}
+                                    >
+                                        <div className="flex flex-col">
+                                            {link.subItems.map((sub, i) => (
+                                                <Link
+                                                    key={i}
+                                                    href={sub.path}
+                                                    className="group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 transition-colors"
+                                                >
+                                                    <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{sub.name}</span>
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-brand-red opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ))}
                         <button
@@ -151,39 +144,35 @@ const Navbar = () => {
                         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
-            </motion.nav>
+            </nav>
 
-            {/* Mobile Menu Overlay */}
-            <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: '-100%' }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: '-100%' }}
-                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                        className="fixed inset-0 z-40 bg-brand-dark flex flex-col justify-center items-center md:hidden"
+            {/* Mobile Menu Overlay — CSS transition */}
+            <div
+                className={`fixed inset-0 z-40 bg-brand-dark flex flex-col justify-center items-center md:hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    isMobileMenuOpen
+                        ? 'opacity-100 translate-y-0 pointer-events-auto'
+                        : 'opacity-0 -translate-y-full pointer-events-none'
+                }`}
+            >
+                <div className="flex flex-col space-y-6 text-center">
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.path}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="text-3xl font-bold text-white hover:text-brand-red transition-colors"
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                    <button
+                        onClick={(e) => { setIsMobileMenuOpen(false); scrollToContact(e); }}
+                        className="mt-4 px-8 py-3 text-lg font-bold bg-white text-black rounded-full hover:bg-brand-red hover:text-white transition-all cursor-pointer"
                     >
-                        <div className="flex flex-col space-y-6 text-center">
-                            {navLinks.map((link) => (
-                                <Link
-                                    key={link.name}
-                                    href={link.path}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-3xl font-bold text-white hover:text-brand-red transition-colors"
-                                >
-                                    {link.name}
-                                </Link>
-                            ))}
-                            <button
-                                onClick={(e) => { setIsMobileMenuOpen(false); scrollToContact(e); }}
-                                className="mt-4 px-8 py-3 text-lg font-bold bg-white text-black rounded-full hover:bg-brand-red hover:text-white transition-all cursor-pointer"
-                            >
-                                Let's Talk
-                            </button>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                        Let's Talk
+                    </button>
+                </div>
+            </div>
         </>
     );
 };
