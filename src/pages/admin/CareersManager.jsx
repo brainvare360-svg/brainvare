@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Briefcase, Plus, Trash2, Edit3, Save, X, ChevronDown, ChevronUp, Users, Eye, ExternalLink, Mail, Phone, Clock, MapPin } from 'lucide-react';
 import { useCareers } from '../../context/CareersContext';
 
@@ -15,7 +15,12 @@ const statusColors = {
 };
 
 const CareersManager = () => {
-    const { careersData, addCareer, updateCareer, deleteCareer, applications, updateApplication, deleteApplication } = useCareers();
+    const { careersData, addCareer, updateCareer, deleteCareer, applications, updateApplication, deleteApplication, fetchCareers, fetchApplications } = useCareers();
+
+    useEffect(() => {
+        fetchCareers();
+        fetchApplications();
+    }, []);
     const [activeTab, setActiveTab] = useState('jobs');
     const [showAddForm, setShowAddForm] = useState(false);
     const [editingId, setEditingId] = useState(null);

@@ -206,9 +206,13 @@ const ApplicationForm = ({ job, onClose }) => {
 };
 
 const Careers = () => {
-    const { careersData } = useCareers();
+    const { careersData, fetchCareers } = useCareers();
     const activeJobs = careersData.filter(job => job.status === 'active');
     const [applyingJob, setApplyingJob] = useState(null);
+
+    useEffect(() => {
+        fetchCareers();
+    }, []);
 
     return (
         <>

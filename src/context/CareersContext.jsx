@@ -64,46 +64,48 @@ export const CareersProvider = ({ children }) => {
     const [applications, setApplications] = useState([]);
     const isInitialLoad = useRef(true);
     const isInitialAppLoad = useRef(true);
+    const hasFetchedCareers = useRef(false);
+    const hasFetchedApps = useRef(false);
 
-    // Fetch careers
-    useEffect(() => {
-        const fetchCareers = async () => {
-            try {
-                const res = await fetch(`${API_URL}/careers`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.items && Array.isArray(data.items) && data.items.length > 0) {
-                        setCareersData(data.items);
-                    }
+    // Lazy fetch careers — called when a component needs it
+    const fetchCareers = async () => {
+        if (hasFetchedCareers.current) return;
+        hasFetchedCareers.current = true;
+        try {
+            const res = await fetch(`${API_URL}/careers`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.items && Array.isArray(data.items) && data.items.length > 0) {
+                    setCareersData(data.items);
                 }
-            } catch (error) {
-                console.error("Failed to load careers:", error);
-            } finally {
-                isInitialLoad.current = false;
             }
-        };
-        fetchCareers();
-    }, []);
+        } catch (error) {
+            console.error("Failed to load careers:", error);
+            hasFetchedCareers.current = false;
+        } finally {
+            isInitialLoad.current = false;
+        }
+    };
 
-    // Fetch applications
-    useEffect(() => {
-        const fetchApps = async () => {
-            try {
-                const res = await fetch(`${API_URL}/applications`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.items && Array.isArray(data.items)) {
-                        setApplications(data.items);
-                    }
+    // Lazy fetch applications — only called by admin
+    const fetchApplications = async () => {
+        if (hasFetchedApps.current) return;
+        hasFetchedApps.current = true;
+        try {
+            const res = await fetch(`${API_URL}/applications`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.items && Array.isArray(data.items)) {
+                    setApplications(data.items);
                 }
-            } catch (error) {
-                console.error("Failed to load applications:", error);
-            } finally {
-                isInitialAppLoad.current = false;
             }
-        };
-        fetchApps();
-    }, []);
+        } catch (error) {
+            console.error("Failed to load applications:", error);
+            hasFetchedApps.current = false;
+        } finally {
+            isInitialAppLoad.current = false;
+        }
+    };
 
     // Auto-save careers
     useEffect(() => {
@@ -172,7 +174,8 @@ export const CareersProvider = ({ children }) => {
     return (
         <CareersContext.Provider value={{
             careersData, addCareer, updateCareer, deleteCareer,
-            applications, addApplication, updateApplication, deleteApplication
+            applications, addApplication, updateApplication, deleteApplication,
+            fetchCareers, fetchApplications
         }}>
             {children}
         </CareersContext.Provider>

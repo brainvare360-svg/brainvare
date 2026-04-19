@@ -82,29 +82,31 @@ export const usePages = () => {
 
 export const PagesProvider = ({ children }) => {
     const [pages, setPages] = useState(defaultPages);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const isInitialLoad = useRef(true);
+    const hasFetched = useRef(false);
 
-    // Load from API on mount
-    useEffect(() => {
-        const loadPages = async () => {
-            try {
-                const res = await fetch(`${API_URL}/pages`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data && Object.keys(data).length > 0) {
-                        setPages({ ...defaultPages, ...data });
-                    }
+    // Lazy fetch — called when admin needs it
+    const fetchPages = async () => {
+        if (hasFetched.current) return;
+        hasFetched.current = true;
+        setLoading(true);
+        try {
+            const res = await fetch(`${API_URL}/pages`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data && Object.keys(data).length > 0) {
+                    setPages({ ...defaultPages, ...data });
                 }
-            } catch (error) {
-                console.error("Failed to load pages from API:", error);
-            } finally {
-                setLoading(false);
-                isInitialLoad.current = false;
             }
-        };
-        loadPages();
-    }, []);
+        } catch (error) {
+            console.error("Failed to load pages from API:", error);
+            hasFetched.current = false;
+        } finally {
+            setLoading(false);
+            isInitialLoad.current = false;
+        }
+    };
 
     // Persist to API whenever pages change (skip initial load)
     useEffect(() => {
@@ -179,7 +181,7 @@ export const PagesProvider = ({ children }) => {
     return (
         <PagesContext.Provider value={{
             pages, loading, updatePage, updatePageContent,
-            updatePageSeo, getPage, getAllPages, resetPages
+            updatePageSeo, getPage, getAllPages, resetPages, fetchPages
         }}>
             {children}
         </PagesContext.Provider>

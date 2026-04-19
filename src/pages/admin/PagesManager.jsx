@@ -182,7 +182,11 @@ const PageCard = ({ page, isActive, onClick }) => {
 
 // Main Pages Manager Component
 const PagesManager = () => {
-    const { pages, getAllPages, updatePage, updatePageContent, updatePageSeo, resetPages } = usePages();
+    const { pages, getAllPages, updatePage, updatePageContent, updatePageSeo, resetPages, fetchPages } = usePages();
+
+    React.useEffect(() => {
+        fetchPages();
+    }, []);
     const [activePage, setActivePage] = useState('home');
     const [activeTab, setActiveTab] = useState('content'); // content, seo
     const [searchTerm, setSearchTerm] = useState('');
