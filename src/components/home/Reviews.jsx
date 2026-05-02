@@ -4,18 +4,18 @@ import { motion } from 'framer-motion';
 const reviews = [
     {
         text: "Brainvare transformed our digital presence completely. The AI integration they suggested increased our leads by 300%.",
-        author: "Alex Morgan",
-        role: "CEO, TechFlow"
+        author: "John Kurian",
+        role: ""
     },
     {
         text: "The most professional creative team we've worked with. The design quality is simply world-class.",
-        author: "Sarah Jenkings",
-        role: "Marketing Director, Bloom"
+        author: "Akhila G",
+        role: ""
     },
     {
         text: "Speed, efficiency, and stunning aesthetics. Brainvare delivered a website that truly represents our premium brand.",
-        author: "James Carter",
-        role: "Founder, Luxe Estates"
+        author: "Sadhiqq Sulaiman",
+        role: ""
     }
 ];
 
@@ -44,7 +44,7 @@ const Reviews = () => {
                                 </p>
                                 <div>
                                     <div className="font-bold text-white">{review.author}</div>
-                                    <div className="text-sm text-gray-500">{review.role}</div>
+                                    {review.role && <div className="text-sm text-gray-400">{review.role}</div>}
                                 </div>
                             </motion.div>
                         ))}
